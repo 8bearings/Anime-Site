@@ -1,4 +1,5 @@
 import { ShowCardProps } from "../types/interfaces"
+import "../css/ShowCard.css"
 
 
 export function ShowCard({show}: ShowCardProps){
@@ -14,8 +15,12 @@ export function ShowCard({show}: ShowCardProps){
         </div>
         <div className="show-overlay">
             <button className="favorite-btn" onClick={onFavClick}>
-
+            ♥
             </button>
+        </div>
+        <div className="show-info">
+            <h3>{show.title}</h3>
+            <p>{show.releaseDate}</p>
         </div>
     </div>
     )
