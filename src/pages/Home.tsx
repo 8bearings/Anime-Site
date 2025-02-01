@@ -42,7 +42,7 @@ export function Home() {
         </button>
       </form>
 
-      <div className='movies-grid'>
+      <div className='shows-grid'>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
