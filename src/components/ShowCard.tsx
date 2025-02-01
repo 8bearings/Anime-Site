@@ -11,7 +11,7 @@ export function ShowCard({show}: ShowCardProps){
     return(
     <div className="show-card">
         <div className="thumbnail-poster">
-            <img src={show.url} alt={show.title} />
+            <img src={show.images.jpg.large_image_url} alt={show.title_english} />
         </div>
         <div className="show-overlay">
             <button className="favorite-btn" onClick={onFavClick}>
@@ -19,9 +19,11 @@ export function ShowCard({show}: ShowCardProps){
             </button>
         </div>
         <div className="show-info">
-            <h3>{show.title}</h3>
-            <p>{show.releaseDate}</p>
+            <h3>{show.title_english}</h3>
+            <p>{show.aired.prop.from.year}</p>
         </div>
     </div>
     )
 }
+
+

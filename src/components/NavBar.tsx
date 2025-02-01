@@ -5,7 +5,7 @@ export function NavBar() {
   return (
     <nav className='navbar'>
       <div className='navbar-brand'>
-        <Link to='/'>Show App</Link>
+        <Link to='/'>DISCOVER ANIME</Link>
       </div>
       <div className='navbar-links'>
         <Link to='/' className='nav-link'>Home</Link>
