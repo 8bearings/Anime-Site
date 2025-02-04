@@ -11,7 +11,7 @@ export function ShowCard({ show }: ShowCardProps) {
   const { isFavorite, addToFavorites, removeFromFavorites } = context
   const favorite = isFavorite(show.mal_id)
 
-  function onFavClick(e: any) {
+  function onFavClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     if (favorite) removeFromFavorites(show.mal_id)
     else addToFavorites(show)

@@ -6,12 +6,10 @@ const ShowContext = createContext<ShowContextType | undefined>(undefined)
 export const useShowContext = () => useContext(ShowContext)
 
 export const ShowProvider = ({ children }: { children: React.ReactNode }) => {
-  const [favorites, setFavorites] = useState<AnimeShow[]>([])
-
-  useEffect(() => {
+  const [favorites, setFavorites] = useState<AnimeShow[]>(() => {
     const storedFavs = localStorage.getItem('favorites')
-    if (storedFavs) setFavorites(JSON.parse(storedFavs))
-  }, [])
+    return storedFavs ? JSON.parse(storedFavs) : []
+  })
 
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites))
