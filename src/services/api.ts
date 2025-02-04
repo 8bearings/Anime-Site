@@ -1,5 +1,3 @@
-// export const API_KEY = ''
-
 export const BASE_URL = 'https://api.jikan.moe/v4'
 
 export const getPopularAnime = async () => {
@@ -10,9 +8,9 @@ export const getPopularAnime = async () => {
 
 export const searchAnime = async (query: string) => {
   const response = await fetch(
-    `${BASE_URL}/anime&q=${encodeURIComponent(
+    `${BASE_URL}/anime?q=${encodeURIComponent(
       query
-    )}`
+    )}&sfw`
   )
   const data = await response.json()
   return data

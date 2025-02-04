@@ -19,7 +19,9 @@ export function ShowCard({show}: ShowCardProps){
             </button>
         </div>
         <div className="show-info">
-            <h3>{show.title_english}</h3>
+            <h3>{
+            !show.title_english ? show.title : show.title_english
+            }</h3>
             <p>{show.aired.prop.from.year}</p>
         </div>
     </div>
