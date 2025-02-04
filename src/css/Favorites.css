@@ -1,5 +1,5 @@
 .favorites {
-  padding: 2rem;
+  padding: 2rem 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -24,13 +24,13 @@
 .favorites-empty h2 {
   margin-bottom: 1rem;
   font-size: 2rem;
-  color: #e50914;
+  color: #e6e6e6;
 }
 
 .favorites-empty p {
   color: #999;
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: .9rem;
+  line-height: 1.1;
 }
 
 
@@ -48,5 +48,11 @@
 
 .shows-grid > * {
   animation: fadeIn 0.3s ease-out forwards;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 

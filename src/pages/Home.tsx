@@ -27,7 +27,6 @@ export function Home() {
     }finally {
         setLoading(false)
     }
-    setSearchQuery("")
   }
 
   useEffect(() => {

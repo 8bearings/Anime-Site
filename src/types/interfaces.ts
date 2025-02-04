@@ -32,3 +32,10 @@ export interface AnimeShow {
     }
   }
 }
+
+export interface ShowContextType {
+  favorites: AnimeShow[] 
+  addToFavorites: (show: AnimeShow) => void 
+  removeFromFavorites: (showId: number) => void 
+  isFavorite: (showId: number) => boolean 
+}
