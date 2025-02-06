@@ -15,6 +15,17 @@ export interface AnimeShow {
   title: string
   title_english: string
   genre: string
+  synopsis: string
+  rating: string
+  score: number
+  genres: [
+    {
+      mal_id: number
+      type: string
+      name: string
+      url: string
+    }
+  ]
   aired: {
     from: string
     to: string
@@ -34,8 +45,8 @@ export interface AnimeShow {
 }
 
 export interface ShowContextType {
-  favorites: AnimeShow[] 
-  addToFavorites: (show: AnimeShow) => void 
-  removeFromFavorites: (showId: number) => void 
-  isFavorite: (showId: number) => boolean 
+  favorites: AnimeShow[]
+  addToFavorites: (show: AnimeShow) => void
+  removeFromFavorites: (showId: number) => void
+  isFavorite: (showId: number) => boolean
 }

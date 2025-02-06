@@ -1,17 +1,73 @@
+.home {
+  padding: 2rem 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Oswald;
+}
 .show-card {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
   background-color: #1a1a1a;
-  transition: transform 0.2s;
+  transition: transform 0.4s;
   height: 100%;
   display: flex;
   flex-direction: column;
   max-width: 500px;
+  cursor: pointer;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .show-card:hover {
   transform: translateY(-5px);
+}
+
+.show-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(124, 2, 2, 0.895);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.58);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.5s;
+  overflow: hidden;
+  font-family: Oswald;
+}
+
+.show-card.expanded .show-details {
+  opacity: 1;
+  overflow: auto;
+}
+
+.synopsis {
+  max-height: 100px; 
+  overflow: hidden; 
+  transition: max-height 0.3s ease; 
+}
+
+.synopsis.expanded {
+  max-height: 300px; 
+  overflow: auto;
+}
+
+.show-more-toggle{
+  padding: 0.2rem .1rem;
+  background-color: rgba(0, 0, 0, 0);
+  color: #dec7ff78;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.show-more-toggle:hover {
+  background-color: rgba(14, 200, 1, 1);
+  color: #ffffff;
 }
 
 .thumbnail-poster {
