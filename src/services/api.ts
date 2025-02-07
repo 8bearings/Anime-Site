@@ -14,11 +14,14 @@ export const searchAnime = async (query: string, page: number = 1) => {
   return data
 }
 
-export function debounce(func, delay) {
-  let timeout
-  return function (...args) {
-    const context = this
+export function debounce<F extends (...args: unknown[]) => unknown>(
+  func: F,
+  delay: number
+): (...args: Parameters<F>) => void {
+  let timeout: ReturnType<typeof setTimeout>
+
+  return (...args: Parameters<F>) => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => func.apply(context, args), delay)
+    timeout = setTimeout(() => func.apply('thisArg', args), delay)
   }
 }
