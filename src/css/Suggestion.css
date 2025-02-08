@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+.show-suggestion {
+  background-color: #444;
+  color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  transform: scale(0.9);
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.show-suggestion.active {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+  height: auto;
+}
+
+.show-suggestion h2 {
+  margin-bottom: 1rem;
+}
+
+h2 {
+  text-align: center;
+}
+
+.Suggest-h3 {
+  text-align: center;
+  color: #0ec801;
+  font-size: 2rem;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.368);
+}
+
+.show-suggestion input[type='checkbox'] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  margin-right: 0.7rem;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.2s, border-color 0.2s;
+  position: relative;
+}
+
+.show-suggestion input[type='checkbox']:checked {
+  background-color: #0ec801;
+  border-color: #000000;
+}
+
+.show-suggestion input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: -1px;
+  width: 5px;
+  height: 12px;
+  border: solid rgb(0, 0, 0);
+  border-width: 0 3px 4px 0;
+  transform: rotate(45deg);
+}
+
+.show-suggestion label {
+  display: flex;
+  align-items: center;
+  padding-right: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.show-suggestion label span {
+  margin-right: 1rem;
+}
+
+.show-suggestion select,
+.show-suggestion input {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+}
+
+.show-suggestion button {
+  padding: 0.5rem 1.5rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.show-suggestion button:hover {
+  background-color: #ffffff;
+  color: rgb(67, 67, 67);
+}
+
+.min-score {
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  margin-top: 1rem;
+}

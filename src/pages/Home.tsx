@@ -1,5 +1,6 @@
 import '../css/Home.css'
 import { ShowCard } from '../components/ShowCard'
+import { Suggestion } from '../components/Suggestion'
 import { useState, useEffect } from 'react'
 import { searchAnime, getPopularAnime, debounce } from '../services/api'
 import { AnimeShow } from '../types/interfaces'
@@ -12,6 +13,7 @@ export function Home() {
   const [page, setPage] = useState<number>(1)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isSearching, setIsSearching] = useState<boolean>(false)
+  const [suggestedShows, setSuggestedShows] = useState<AnimeShow[]>([])
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -23,7 +25,8 @@ export function Home() {
     setShows([])
 
     try {
-      const searchResults = await searchAnime(searchQuery, 1)
+      const queryString = `?q=${encodeURIComponent(searchQuery)}`
+      const searchResults = await searchAnime(queryString, 1)
       setShows(searchResults.data)
       setError(null)
       setHasMore(searchResults.data.length > 0)
@@ -38,7 +41,8 @@ export function Home() {
   const loadSearchAnime = async (page: number) => {
     if (loading) return
     try {
-      const searchResults = await searchAnime(searchQuery, page)
+      const queryString = `?q=${encodeURIComponent(searchQuery)}`
+      const searchResults = await searchAnime(queryString, page)
       setShows((prevShows) => [...prevShows, ...searchResults.data])
       setHasMore(searchResults.data.length > 0)
     } catch (error) {
@@ -122,8 +126,16 @@ export function Home() {
     loadPopularAnime(1)
   }
 
+  const handleShowSuggestion = (suggestedShows: AnimeShow[]) => {
+    setSuggestedShows(suggestedShows)
+    setIsSearching(true)
+  }
+
   return (
     <div className='home'>
+      <button className='refresh-button' onClick={handleRefresh}>
+        Click to Refresh Popular Anime
+      </button>
       <form onSubmit={handleSearch} className='search-form'>
         <input
           type='text'
@@ -136,22 +148,33 @@ export function Home() {
           Search
         </button>
       </form>
-      <button className='refresh-button' onClick={handleRefresh}>
-        Click to Refresh Popular Anime
-      </button>
-      <div className='shows-grid'>
-        {loading ? (
-          <div className='loading'></div>
-        ) : error ? (
-          <div className='error-message'>{error}</div>
-        ) : uniqueShows.length > 0 ? (
-          uniqueShows.map((show: AnimeShow) => (
-            <ShowCard show={show} key={show.mal_id} />
-          ))
-        ) : (
-          <p>No shows found.</p>
-        )}
-      </div>
+
+      <Suggestion onSuggest={handleShowSuggestion} />
+
+      {isSearching && suggestedShows.length > 0 ? (
+        <div>
+          <h3 className='Suggest-h3'>SUGGESTIONS</h3>
+          <div className='suggested-shows'>
+            {suggestedShows.map((show: AnimeShow) => (
+              <ShowCard show={show} key={show.mal_id} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className='shows-grid'>
+          {loading ? (
+            <div className='loading'></div>
+          ) : error ? (
+            <div className='error-message'>{error}</div>
+          ) : uniqueShows.length > 0 ? (
+            uniqueShows.map((show: AnimeShow) => (
+              <ShowCard show={show} key={show.mal_id} />
+            ))
+          ) : (
+            <p>No shows found.</p>
+          )}
+        </div>
+      )}
       {hasMore && bottom && <div className='loading'></div>}
     </div>
   )

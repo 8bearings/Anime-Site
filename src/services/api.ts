@@ -7,9 +7,7 @@ export const getPopularAnime = async (page: number = 1) => {
 }
 
 export const searchAnime = async (query: string, page: number = 1) => {
-  const response = await fetch(
-    `${BASE_URL}/anime?q=${encodeURIComponent(query)}&sfw&page=${page}`
-  )
+  const response = await fetch(`${BASE_URL}/anime${query}&page=${page}`)
   const data = await response.json()
   return data
 }

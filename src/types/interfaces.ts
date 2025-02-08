@@ -51,6 +51,9 @@ export interface ShowContextType {
   isFavorite: (showId: number) => boolean
 }
 
+export interface SuggestionProps {
+  onSuggest: (suggestedShows: AnimeShow[]) => void; // Change to accept an array of shows
+}
 
 /// COMPLETE RESPONSE from API
 

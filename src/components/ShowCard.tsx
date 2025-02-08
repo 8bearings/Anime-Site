@@ -13,13 +13,13 @@ export function ShowCard({ show }: ShowCardProps) {
   const favorite = isFavorite(show.mal_id)
 
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isSynopsisExpanded, setIsSynopsisExpanded] = useState(false);
+  const [isSynopsisExpanded, setIsSynopsisExpanded] = useState(false)
 
   function toggleExpand() {
     setIsExpanded((prev) => !prev)
   }
   function toggleSynopsis() {
-    setIsSynopsisExpanded(prev => !prev)
+    setIsSynopsisExpanded((prev) => !prev)
   }
 
   function onFavClick(e: React.MouseEvent<HTMLButtonElement>) {
@@ -29,7 +29,10 @@ export function ShowCard({ show }: ShowCardProps) {
   }
 
   return (
-    <div className={`show-card ${isExpanded ? 'expanded' : ''}`} onClick={toggleExpand}>
+    <div
+      className={`show-card ${isExpanded ? 'expanded' : ''}`}
+      onClick={toggleExpand}
+    >
       <div className='thumbnail-poster'>
         <img src={show.images.jpg.large_image_url} alt={show.title_english} />
       </div>
@@ -46,23 +49,33 @@ export function ShowCard({ show }: ShowCardProps) {
         <p>{show.aired.prop.from.year}</p>
       </div>
       {isExpanded && (
-    <div className={`show-details ${isExpanded ? 'expanded' : ''}`}>
-      <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
-        {show.synopsis}
-      </div>
-      <button className='show-more-toggle' onClick={(e) => {
-            e.stopPropagation() 
-            toggleSynopsis()
-          }}>
-        {isSynopsisExpanded ? 'Show Less' : 'Show More'}
-      </button>
-      <p><strong>Genres:</strong> {show.genres.map(genre => genre.name).join(', ')}</p>
-      <p><strong>Rating:</strong> {show.rating}</p>
-      <p><strong>Score:</strong> {show.score}</p>
-     
-    </div>
+        <div className={`show-details ${isExpanded ? 'expanded' : ''}`}>
+          <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
+            {show.synopsis}
+          </div>
+          <button
+            className='show-more-toggle'
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleSynopsis()
+            }}
+          >
+            {isSynopsisExpanded ? 'Show Less' : 'Show More'}
+          </button>
+          <div className='not-synopsis-details'>
+            <p>
+              <strong>Genres:</strong>{' '}
+              {show.genres.map((genre) => genre.name).join(', ')}
+            </p>
+            <p>
+              <strong>Rating:</strong> {show.rating}
+            </p>
+            <p>
+              <strong>Score:</strong> {show.score}
+            </p>
+          </div>
+        </div>
       )}
-
     </div>
   )
 }
