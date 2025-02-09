@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import '../css/Home.css'
 import { ShowCard } from '../components/ShowCard'
 import { Suggestion } from '../components/Suggestion'
 import { useState, useEffect } from 'react'
 import { searchAnime, getPopularAnime, debounce } from '../services/api'
 import { AnimeShow } from '../types/interfaces'
+import { Footer } from '../components/Footer'
 
 export function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -14,6 +16,7 @@ export function Home() {
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [suggestedShows, setSuggestedShows] = useState<AnimeShow[]>([])
+  const [tooManyRequests, setTooManyRequests] = useState<boolean>(false) 
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -23,16 +26,24 @@ export function Home() {
     setIsSearching(true)
     setPage(1)
     setShows([])
+    setTooManyRequests(false)
+    setError(null)
 
     try {
       const queryString = `?q=${encodeURIComponent(searchQuery)}`
       const searchResults = await searchAnime(queryString, 1)
+
       setShows(searchResults.data)
       setError(null)
       setHasMore(searchResults.data.length > 0)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      setError('Failed to search anime')
+      if (error.response && error.response.status === 429) {
+        setTooManyRequests(true)
+        setError('Too many requests. Please try again later.')
+      } else {
+        setError('Failed to search anime.')
+      }
     } finally {
       setLoading(false)
     }
@@ -45,9 +56,14 @@ export function Home() {
       const searchResults = await searchAnime(queryString, page)
       setShows((prevShows) => [...prevShows, ...searchResults.data])
       setHasMore(searchResults.data.length > 0)
-    } catch (error) {
+    } catch (error: any) {
       console.log(error)
-      setError('Failed to load more search results...')
+      if (error.response && error.response.status === 429) {
+        setTooManyRequests(true) 
+        setError('Too many requests. Please try again later.')
+      } else {
+        setError('Failed to load more search results...')
+      }
     } finally {
       setLoading(false)
     }
@@ -55,21 +71,31 @@ export function Home() {
 
   const loadPopularAnime = async (page: number) => {
     if (loading) return
+
     try {
       const popularAnime = await getPopularAnime(page)
 
-      setShows((prevShows) => {
-        if (page === 1) {
-          return popularAnime.data
-        } else {
-          return [...prevShows, ...popularAnime.data]
-        }
-      })
-      setHasMore(popularAnime.data.length > 0)
-      console.log(' HAS MORE API response', popularAnime.data)
-    } catch (error) {
-      console.log(error)
-      setError('Failed to load anime...')
+      if (popularAnime && popularAnime.data) {
+        setShows((prevShows) => {
+          if (page === 1) {
+            return popularAnime.data
+          } else {
+            return [...prevShows, ...popularAnime.data]
+          }
+        })
+        setHasMore(popularAnime.data.length > 0)
+      } else {
+        throw new Error('Invalid API response')
+      }
+    } catch (error: any) {
+      console.error(error)
+
+      if (error.response && error.response.status === 429) {
+        setTooManyRequests(true) // Set 429 error state
+        setError('Too many requests. Please try again later.')
+      } else {
+        setError('Failed to load anime. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -80,7 +106,7 @@ export function Home() {
     document.documentElement.scrollHeight - 100
 
   const handleScroll = () => {
-    if (loading || !hasMore) return
+    if (loading || !hasMore || tooManyRequests) return
 
     bottom =
       window.innerHeight + window.scrollY >=
@@ -123,7 +149,10 @@ export function Home() {
     setLoading(true)
     setIsSearching(false)
     setSearchQuery('')
+    setTooManyRequests(false) 
+    setError(null) 
     loadPopularAnime(1)
+    setSuggestedShows([])
   }
 
   const handleShowSuggestion = (suggestedShows: AnimeShow[]) => {
@@ -132,50 +161,67 @@ export function Home() {
   }
 
   return (
-    <div className='home'>
-      <button className='refresh-button' onClick={handleRefresh}>
-        Click to Refresh Popular Anime
-      </button>
-      <form onSubmit={handleSearch} className='search-form'>
-        <input
-          type='text'
-          placeholder='Search for anime...'
-          className='search-input'
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button type='submit' className='search-button'>
-          Search
-        </button>
-      </form>
-
-      <Suggestion onSuggest={handleShowSuggestion} />
-
-      {isSearching && suggestedShows.length > 0 ? (
-        <div>
-          <h3 className='Suggest-h3'>SUGGESTIONS</h3>
-          <div className='suggested-shows'>
-            {suggestedShows.map((show: AnimeShow) => (
-              <ShowCard show={show} key={show.mal_id} />
-            ))}
+    <div className='home-container'>
+      <div className='home-content'>
+        <div className='home'>
+          <button className='refresh-button' onClick={handleRefresh}>
+            Click to Refresh Popular Anime
+          </button>
+          <div className='search-and-suggestion-container'>
+            <form onSubmit={handleSearch} className='search-form'>
+              <input
+                type='text'
+                placeholder='Search for anime...'
+                className='search-input'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button type='submit' className='search-button'>
+                Search
+              </button>
+            </form>
+            <Suggestion onSuggest={handleShowSuggestion} />
           </div>
-        </div>
-      ) : (
-        <div className='shows-grid'>
-          {loading ? (
-            <div className='loading'></div>
-          ) : error ? (
-            <div className='error-message'>{error}</div>
-          ) : uniqueShows.length > 0 ? (
-            uniqueShows.map((show: AnimeShow) => (
-              <ShowCard show={show} key={show.mal_id} />
-            ))
+
+          {(tooManyRequests || error) && (
+            <div className='error-message'>
+              <p>Too many requests. Please try again later.</p>
+              <button onClick={handleRefresh} className='retry-button'>
+                Retry
+              </button>
+            </div>
+          )}
+
+          {isSearching && suggestedShows.length > 0 ? (
+            <div>
+              {/* <h3 className='Suggest-h3'>SUGGESTIONS</h3> */}
+              <div className='suggested-shows'>
+                {suggestedShows.map((show: AnimeShow) => (
+                  <ShowCard show={show} key={show.mal_id} />
+                ))}
+              </div>
+            </div>
           ) : (
-            <p>No shows found.</p>
+            <div className='shows-grid'>
+              {loading ? (
+                <div className='loading'></div>
+              ) : error ? (
+                <div className='error-message'>{error}</div>
+              ) : uniqueShows.length > 0 ? (
+                uniqueShows.map((show: AnimeShow) => (
+                  <ShowCard show={show} key={show.mal_id} />
+                ))
+              ) : (
+                <p>No shows found.</p>
+              )}
+            </div>
+          )}
+          {!error && suggestedShows.length === 0 && hasMore && bottom && (
+            <div className='loading'></div>
           )}
         </div>
-      )}
-      {hasMore && bottom && <div className='loading'></div>}
+      </div>
+      <Footer />
     </div>
   )
 }

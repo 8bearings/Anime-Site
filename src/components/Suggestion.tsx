@@ -2,6 +2,7 @@ import '../css/Suggestion.css'
 import React, { useState } from 'react'
 import { SuggestionProps } from '../types/interfaces'
 import { searchAnime } from '../services/api'
+import { genreOptions } from '../services/helper'
 
 export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
   const [genre, setGenre] = useState<string>('')
@@ -12,15 +13,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
   const [error, setError] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const genreOptions = [
-    { id: '1', name: 'Action' },
-    { id: '2', name: 'Adventure' },
-    { id: '4', name: 'Comedy' },
-    { id: '8', name: 'Drama' },
-    { id: '10', name: 'Fantasy' },
-    { id: '22', name: 'Romance' },
-    { id: '24', name: 'Sci Fi' },
-  ]
+ 
 
   const handleSuggest = async () => {
     setLoading(true)
@@ -53,10 +46,10 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
   return (
     <div>
       <button onClick={() => setIsOpen(!isOpen)} className='toggle-suggestion'>
-        {isOpen ? 'Hide Suggestions' : 'Get Anime Suggestions'}
+        {isOpen ? 'Hide Options' : 'Need Some Direction?'}
       </button>
       <div className={`show-suggestion ${isOpen ? 'active' : ''}`}>
-        <h2>Get Anime Suggestions</h2>
+        <h2>It's Time to Find!</h2>
         <div>
           <label>
             <span>Genre:</span>
@@ -72,7 +65,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
         </div>
         <div>
           <label>
-            <span>Min Score:</span>
+            <span>Minimum Score:</span>
             <span className='min-score'>{minScore}</span>
             <input
               type='range'

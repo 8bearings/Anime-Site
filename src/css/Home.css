@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
-
 .home {
   padding: 2rem 0;
   width: 100%;
@@ -47,7 +46,6 @@
   color: rgb(67, 67, 67);
 }
 
-
 @media (max-width: 639px) {
   .home {
     padding: 1rem 0;
@@ -58,25 +56,28 @@
   }
 }
 
-.refresh-button{
+.refresh-button {
   margin: 0 auto;
   display: block;
-  padding: 0.15rem .2rem;
+  padding: 0.15rem 0.2rem;
   background-color: #2b2b2b1f;
   color: rgba(255, 255, 255, 0.263);
   border-radius: 5px;
   font-weight: 500;
-  font-size:.9rem;
+  font-size: 0.8rem;
   transition: background-color 0.3s;
   margin-bottom: 10px;
 }
 
 .refresh-button:hover {
-  background-color:#0ec801;;
+  background-color: #3a3a3a;
   color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 6px;
 }
 
-.shows-grid, .suggested-shows{
+.shows-grid,
+.suggested-shows {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
@@ -90,10 +91,43 @@
   width: 40px;
   height: 40px;
   border: 10px solid rgba(255, 255, 255, 0.527);
-  border-radius: 50%; 
+  border-radius: 50%;
   border-top-color: white;
   align-items: center;
   animation: spin 1s ease-in-out infinite;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-content {
+  flex: 1;
+}
+
+.error-message {
+  text-align: center;
+  margin: 1rem 0;
+  color: #ff4757;
+}
+
+.retry-button {
+  padding: 0.5rem 1rem;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 360px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.retry-button:hover {
+  background-color: #0ec801;
+  color: black;
 }
 
 @keyframes spin {

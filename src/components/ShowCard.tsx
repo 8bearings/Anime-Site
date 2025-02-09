@@ -12,8 +12,8 @@ export function ShowCard({ show }: ShowCardProps) {
   const { isFavorite, addToFavorites, removeFromFavorites } = context
   const favorite = isFavorite(show.mal_id)
 
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [isSynopsisExpanded, setIsSynopsisExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isSynopsisExpanded, setIsSynopsisExpanded] = useState<boolean>(false)
 
   function toggleExpand() {
     setIsExpanded((prev) => !prev)
@@ -50,7 +50,7 @@ export function ShowCard({ show }: ShowCardProps) {
       </div>
       <div className='show-details'>
         <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
-          <strong className='strong-synopsis'>Synopsis: </strong>
+          <strong className='strong-synopsis'>Description: </strong>
           {show.synopsis}
         </div>
         <button
@@ -71,7 +71,7 @@ export function ShowCard({ show }: ShowCardProps) {
             <strong>Rating:</strong> {show.rating}
           </p>
           <p>
-            <strong>Score:</strong> {show.score}
+            <strong>Score:</strong> {show.score} <strong className='ten'>/ 10</strong>
           </p>
         </div>
       </div>
