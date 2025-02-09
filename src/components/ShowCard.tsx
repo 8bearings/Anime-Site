@@ -48,34 +48,33 @@ export function ShowCard({ show }: ShowCardProps) {
         <h3>{!show.title_english ? show.title : show.title_english}</h3>
         <p>{show.aired.prop.from.year}</p>
       </div>
-      {isExpanded && (
-        <div className={`show-details ${isExpanded ? 'expanded' : ''}`}>
-          <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
-            {show.synopsis}
-          </div>
-          <button
-            className='show-more-toggle'
-            onClick={(e) => {
-              e.stopPropagation()
-              toggleSynopsis()
-            }}
-          >
-            {isSynopsisExpanded ? 'Show Less' : 'Show More'}
-          </button>
-          <div className='not-synopsis-details'>
-            <p>
-              <strong>Genres:</strong>{' '}
-              {show.genres.map((genre) => genre.name).join(', ')}
-            </p>
-            <p>
-              <strong>Rating:</strong> {show.rating}
-            </p>
-            <p>
-              <strong>Score:</strong> {show.score}
-            </p>
-          </div>
+      <div className='show-details'>
+        <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
+          <strong className='strong-synopsis'>Synopsis: </strong>
+          {show.synopsis}
         </div>
-      )}
+        <button
+          className='show-more-toggle'
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleSynopsis()
+          }}
+        >
+          {isSynopsisExpanded ? 'Show Less' : 'Show More'}
+        </button>
+        <div className='not-synopsis-details'>
+          <p>
+            <strong>Genres:</strong>{' '}
+            {show.genres.map((genre) => genre.name).join(', ')}
+          </p>
+          <p>
+            <strong>Rating:</strong> {show.rating}
+          </p>
+          <p>
+            <strong>Score:</strong> {show.score}
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
