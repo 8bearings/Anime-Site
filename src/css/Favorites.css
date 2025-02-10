@@ -29,12 +29,10 @@
 
 .favorites-empty p {
   color: #999;
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1.1;
 }
 
-
-/* Animation for new favorites being added */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -56,3 +54,21 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+  .favorites h2 {
+    font-size: 2rem; 
+  }
+
+  .favorites-empty h2 {
+    font-size: 1.5rem; 
+  }
+
+  .favorites-empty p {
+    font-size: 0.8rem; 
+  }
+
+  .shows-grid > * {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}

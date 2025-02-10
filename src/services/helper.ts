@@ -1,27 +1,29 @@
-
 export const genreOptions = [
-    { id: '1', name: 'Action' },
-    { id: '2', name: 'Adventure' },
-    { id: '4', name: 'Comedy' },
-    { id: '28', name: 'Boys Love' },
-    { id: '8', name: 'Drama' },
-    { id: '10', name: 'Fantasy' },
-    { id: '22', name: 'Romance' },
-    { id: '24', name: 'Sci Fi' },
-    { id: '46', name: 'Award Winning' },
-    { id: '36', name: 'Slice of Life' },
-    { id: '37', name: 'Supernatural' },
-    { id: '62', name: 'Isekai (sent to a different world)' },
-    { id: '14', name: 'Horror' },
-    { id: '30', name: 'Sports' },
-    { id: '25', name: "Shoujo ('gal' target audience)" },
-    { id: '27', name: "Shounen ('guy' target audience)" },
-    { id: '7', name: 'Mystery' },
-  ].sort((a, b) => a.name.localeCompare(b.name))
+  { id: '1', name: 'Action' },
+  { id: '2', name: 'Adventure' },
+  { id: '4', name: 'Comedy' },
+  { id: '28', name: 'Boys Love' },
+  { id: '8', name: 'Drama' },
+  { id: '10', name: 'Fantasy' },
+  { id: '22', name: 'Romance' },
+  { id: '24', name: 'Sci Fi' },
+  { id: '46', name: 'Award Winning' },
+  { id: '36', name: 'Slice of Life' },
+  { id: '37', name: 'Supernatural' },
+  { id: '62', name: 'Isekai (sent to a different world)' },
+  { id: '14', name: 'Horror' },
+  { id: '30', name: 'Sports' },
+  { id: '25', name: "Shoujo ('gal' target audience)" },
+  { id: '27', name: "Shounen ('guy' target audience)" },
+  { id: '7', name: 'Mystery' },
+  { id: '43', name: "Josei ('adult gal' target audience)" },
+  { id: '42', name: "Seinen ('adult guy' target audience)" },
+].sort((a, b) => a.name.localeCompare(b.name))
 
 
 
-  //FULL LIST OF GENRES
+
+//FULL LIST OF GENRES
 /*
   export const genreOptions = [
     { id: '1', name: 'Action' },

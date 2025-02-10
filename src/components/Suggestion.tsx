@@ -5,15 +5,31 @@ import { searchAnime } from '../services/api'
 import { genreOptions } from '../services/helper'
 
 export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
-  const [genre, setGenre] = useState<string>('')
+  const [genres, setGenres] = useState<string[]>([])
   const [minScore, setMinScore] = useState<number>(0)
+  const [startYear, setStartYear] = useState<string>('') // Track start year
   const [rating, setRating] = useState<string>('')
   const [sfw, setSfw] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
- 
+  const MAX_GENRES = 3
+
+  const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedGenre = e.target.value
+    if (
+      selectedGenre &&
+      !genres.includes(selectedGenre) &&
+      genres.length < MAX_GENRES
+    ) {
+      setGenres([...genres, selectedGenre])
+    }
+  }
+
+  const removeGenre = (genreId: string) => {
+    setGenres(genres.filter((id) => id !== genreId))
+  }
 
   const handleSuggest = async () => {
     setLoading(true)
@@ -21,8 +37,9 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
 
     try {
       const params: string[] = []
-      if (genre) params.push(`genres=${encodeURIComponent(genre)}`)
+      if (genres.length > 0) params.push(`genres=${genres.join(',')}`)
       if (minScore > 0) params.push(`min_score=${minScore}`)
+      if (startYear) params.push(`start_date=${startYear}-01-01`) 
       if (rating) params.push(`rating=${encodeURIComponent(rating)}`)
       if (sfw) params.push(`sfw=true`)
 
@@ -53,7 +70,11 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
         <div>
           <label>
             <span>Genre:</span>
-            <select value={genre} onChange={(e) => setGenre(e.target.value)}>
+            <select
+              value=''
+              onChange={handleGenreChange}
+              disabled={genres.length >= MAX_GENRES}
+            >
               <option value=''>Select Genre</option>
               {genreOptions.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -62,6 +83,23 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
               ))}
             </select>
           </label>
+          <div className='selected-genres'>
+            {genres.map((genreId) => {
+              const genre = genreOptions.find((g) => g.id === genreId)
+              const shortG = genre?.name.split('(')
+              return (
+                <div key={genreId} className='genre-chip'>
+                  {shortG?.shift()}
+                  <button onClick={() => removeGenre(genreId)}>×</button>
+                </div>
+              )
+            })}
+          </div>
+          {genres.length >= MAX_GENRES && (
+            <p className='genre-limit-message'>
+              Maximum of {MAX_GENRES} genres selected.
+            </p>
+          )}
         </div>
         <div>
           <label>
@@ -78,6 +116,19 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
         </div>
         <div>
           <label>
+            <span>After the Year:</span>
+            <input
+              type='number'
+              placeholder='YYYY'
+              value={startYear}
+              onChange={(e) => setStartYear(e.target.value)}
+              min='1900'
+              max={new Date().getFullYear()}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
             <span>Rating:</span>
             <select value={rating} onChange={(e) => setRating(e.target.value)}>
               <option value=''>Select Rating</option>
@@ -89,9 +140,9 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
           </label>
         </div>
         <div>
-          <label>
+          <label className='sfw'>
             <span>Safe for Work:</span>
-            <input
+            <input 
               type='checkbox'
               checked={sfw}
               onChange={(e) => setSfw(e.target.checked)}

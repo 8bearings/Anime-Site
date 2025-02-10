@@ -180,15 +180,80 @@
 @media (max-width: 768px) {
   .show-card {
     font-size: 0.9rem;
+    max-width: 100%;
   }
 
   .show-info {
     padding: 0.75rem;
+    padding-top: 0;
+    gap: 0.3rem;
   }
-
   .favorite-btn {
     width: 32px;
     height: 32px;
     font-size: 1.2rem;
+  }
+
+  .show-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .show-info p {
+    font-size: 0.85rem;
+  }
+
+  .thumbnail-poster {
+    aspect-ratio: 1/1.2;
+  }
+
+  .show-details {
+    padding: 15px;
+  }
+
+  .strong-synopsis {
+    font-size: 0.9rem;
+  }
+
+  .show-more-toggle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .show-card {
+    max-width: 100%;
+    max-height: 97%;
+    font-size: 0.8rem;
+  }
+  .show-info {
+    padding: 1rem;
+    padding-top: 0;
+    gap: 0.3rem;
+  }
+
+  .show-info h3 {
+    font-size: 1rem;
+  }
+
+  .show-info p {
+    margin-bottom: 2px;
+  }
+
+  .favorite-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  .show-details {
+    padding: 10px;
+  }
+
+  .strong-synopsis {
+    font-size: 0.8rem;
+  }
+
+  .show-more-toggle {
+    font-size: 0.8rem;
   }
 }

@@ -216,7 +216,7 @@ export function Home() {
               )}
             </div>
           )}
-          {!error && suggestedShows.length === 0 && hasMore && bottom && (
+          {!error && suggestedShows.length === 0 && hasMore && bottom && ( 
             <div className='loading'></div>
           )}
         </div>

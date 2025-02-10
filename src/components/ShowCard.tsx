@@ -71,7 +71,7 @@ export function ShowCard({ show }: ShowCardProps) {
             <strong>Rating:</strong> {show.rating}
           </p>
           <p>
-            <strong>Score:</strong> {show.score} <strong className='ten'>/ 10</strong>
+            <strong>Score:</strong> {!show.score ? '?': show.score} <strong className='ten'>/ 10</strong>
           </p>
         </div>
       </div>
