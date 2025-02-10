@@ -1,50 +1,56 @@
-# React + TypeScript + Vite
+# Anime Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+Anime Finder is a web application built using React and TypeScript that allows users to search for their favorite anime shows. The application provides a user-friendly interface to explore various anime genres, view details about specific shows, and save favorites for easy access later.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Search Functionality**: Users can search for anime by title or genre.
+- **Favorite Anime**: Users can add anime shows to their favorites for quick access.
+- **Responsive Design**: The application is designed to be mobile-friendly, ensuring a seamless experience on various devices.
+- **Genre Suggestions**: Users can view and select from a list of anime genres to refine their search.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript, providing type safety and improved developer experience.
+- **CSS**: For styling the application and ensuring a responsive layout.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+To get started with the Anime Finder application, follow these steps:
+
+**Clone the Repository**:
+
+```bash
+git clone https://github.com/8bearings/Anime-Site.git
+
+npm install
+
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Usage
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Searching for Anime**: Use the search bar to enter the title or genre of the anime you want to find. Click the search button to see the results.
+- **Favoriting Anime**: Click the heart icon on any anime card to add it to your favorites. You can view your favorites in the favorites section.
+- **Viewing Details**: Click on any anime card to view more details about the show, including synopsis, genres, and ratings.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Usage
+
+- **Searching for Anime**: Use the search bar to enter the title or genre of the anime you want to find. Click the search button to see the results.
+- **Favoriting Anime**: Click the heart icon on any anime card to add it to your favorites. You can view your favorites in the favorites section.
+- **Viewing Details**: Click on any anime card to view more details about the show, including synopsis, genres, and ratings.
+
+## Contributing
+
+Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the [Jikan](https://jikan.moe/) for providing the data used in this application.
