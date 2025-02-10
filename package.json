@@ -1,4 +1,5 @@
 {
+  "homepage": "https://8bearings.github.io/Anime-Site",
   "name": "animesite",
   "private": true,
   "version": "0.0.0",
@@ -6,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d build",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
