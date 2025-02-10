@@ -47,4 +47,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Acknowledgments
 
-- Thanks to the [Jikan](https://jikan.moe/) for providing the data used in this application.
+- Thanks to the [Jikan API](https://jikan.moe/) for providing the data used in this application.
