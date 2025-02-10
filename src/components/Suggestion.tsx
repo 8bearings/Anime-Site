@@ -7,7 +7,7 @@ import { genreOptions } from '../services/helper'
 export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
   const [genres, setGenres] = useState<string[]>([])
   const [minScore, setMinScore] = useState<number>(0)
-  const [startYear, setStartYear] = useState<string>('') // Track start year
+  const [startYear, setStartYear] = useState<string>('') 
   const [rating, setRating] = useState<string>('')
   const [sfw, setSfw] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)

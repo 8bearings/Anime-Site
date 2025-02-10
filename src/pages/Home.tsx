@@ -91,7 +91,7 @@ export function Home() {
       console.error(error)
 
       if (error.response && error.response.status === 429) {
-        setTooManyRequests(true) // Set 429 error state
+        setTooManyRequests(true) 
         setError('Too many requests. Please try again later.')
       } else {
         setError('Failed to load anime. Please try again.')
