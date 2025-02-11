@@ -1,3 +1,7 @@
+export interface NavBarProps {
+  onRefresh: () => void
+}
+
 export interface ShowCardProps {
   show: AnimeShow
 }
@@ -52,7 +56,7 @@ export interface ShowContextType {
 }
 
 export interface SuggestionProps {
-  onSuggest: (suggestedShows: AnimeShow[]) => void; // Change to accept an array of shows
+  onSuggest: (suggestedShows: AnimeShow[]) => void // Change to accept an array of shows
 }
 
 /// COMPLETE RESPONSE from API

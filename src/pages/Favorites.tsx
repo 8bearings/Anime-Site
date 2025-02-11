@@ -14,7 +14,7 @@ export function Favorites() {
   if (favorites.length > 0 ){
     return(
 <div className="favorites">
-    <h2>Your Favorties</h2>
+    <h2>Your Favorites</h2>
      <div className='shows-grid'>
               { favorites.map((show: AnimeShow, index: number) => (
                 

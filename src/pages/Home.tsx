@@ -16,7 +16,7 @@ export function Home() {
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [suggestedShows, setSuggestedShows] = useState<AnimeShow[]>([])
-  const [tooManyRequests, setTooManyRequests] = useState<boolean>(false) 
+  const [tooManyRequests, setTooManyRequests] = useState<boolean>(false)
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -59,7 +59,7 @@ export function Home() {
     } catch (error: any) {
       console.log(error)
       if (error.response && error.response.status === 429) {
-        setTooManyRequests(true) 
+        setTooManyRequests(true)
         setError('Too many requests. Please try again later.')
       } else {
         setError('Failed to load more search results...')
@@ -91,7 +91,7 @@ export function Home() {
       console.error(error)
 
       if (error.response && error.response.status === 429) {
-        setTooManyRequests(true) 
+        setTooManyRequests(true)
         setError('Too many requests. Please try again later.')
       } else {
         setError('Failed to load anime. Please try again.')
@@ -149,8 +149,8 @@ export function Home() {
     setLoading(true)
     setIsSearching(false)
     setSearchQuery('')
-    setTooManyRequests(false) 
-    setError(null) 
+    setTooManyRequests(false)
+    setError(null)
     loadPopularAnime(1)
     setSuggestedShows([])
   }
@@ -216,7 +216,7 @@ export function Home() {
               )}
             </div>
           )}
-          {!error && suggestedShows.length === 0 && hasMore && bottom && ( 
+          {!error && suggestedShows.length === 0 && hasMore && bottom && (
             <div className='loading'></div>
           )}
         </div>

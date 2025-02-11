@@ -2,11 +2,9 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +17,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
@@ -70,6 +69,15 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+input,
+button,
+textarea,
+select {
+  background-color: #333; /* Dark background for form elements */
+  color: rgba(255, 255, 255, 0.87); /* Light text for form elements */
+}
+
+/*
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -82,3 +90,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+*/
