@@ -7,7 +7,7 @@ import { genreOptions } from '../services/helper'
 export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
   const [genres, setGenres] = useState<string[]>([])
   const [minScore, setMinScore] = useState<number>(0)
-  const [startYear, setStartYear] = useState<string>('') 
+  const [startYear, setStartYear] = useState<string>('')
   const [rating, setRating] = useState<string>('')
   const [sfw, setSfw] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
@@ -39,7 +39,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
       const params: string[] = []
       if (genres.length > 0) params.push(`genres=${genres.join(',')}`)
       if (minScore > 0) params.push(`min_score=${minScore}`)
-      if (startYear) params.push(`start_date=${startYear}-01-01`) 
+      if (startYear) params.push(`start_date=${startYear}-01-01`)
       if (rating) params.push(`rating=${encodeURIComponent(rating)}`)
       if (sfw) params.push(`sfw=true`)
 
@@ -58,6 +58,14 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const clearSelections = () => {
+    setGenres([])
+    setMinScore(0)
+    setStartYear('')
+    setRating('')
+    setSfw(true)
   }
 
   return (
@@ -142,7 +150,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
         <div>
           <label className='sfw'>
             <span>Safe for Work:</span>
-            <input 
+            <input
               type='checkbox'
               checked={sfw}
               onChange={(e) => setSfw(e.target.checked)}
@@ -151,6 +159,9 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
         </div>
         <button onClick={handleSuggest} disabled={loading}>
           {loading ? 'Loading...' : 'Suggest Shows'}
+        </button>
+        <button onClick={clearSelections} className='clear-selections-button'>
+          Clear Selections
         </button>
         {error && <p className='error-message'>{error}</p>}
       </div>

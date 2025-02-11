@@ -18,6 +18,7 @@ export interface AnimeShow {
   }
   title: string
   title_english: string
+  type: string
   genre: string
   synopsis: string
   rating: string

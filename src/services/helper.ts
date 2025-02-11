@@ -20,8 +20,8 @@ export const genreOptions = [
   { id: '42', name: "Seinen ('adult guy' target audience)" },
 ].sort((a, b) => a.name.localeCompare(b.name))
 
-
-
+export const excludedTypes: string[] = ['Music', 'PV']
+export const excludedGenres: string[] = ['Hentai']
 
 //FULL LIST OF GENRES
 /*

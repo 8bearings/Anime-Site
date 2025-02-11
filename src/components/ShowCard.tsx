@@ -24,9 +24,13 @@ export function ShowCard({ show }: ShowCardProps) {
 
   function onFavClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
+    e.stopPropagation()
     if (favorite) removeFromFavorites(show.mal_id)
     else addToFavorites(show)
   }
+
+  const synopsis = show.synopsis || ''
+  const isLongSynopsis = synopsis.length > 100
 
   return (
     <div
@@ -53,15 +57,17 @@ export function ShowCard({ show }: ShowCardProps) {
           <strong className='strong-synopsis'>Description: </strong>
           {show.synopsis}
         </div>
-        <button
-          className='show-more-toggle'
-          onClick={(e) => {
-            e.stopPropagation()
-            toggleSynopsis()
-          }}
-        >
-          {isSynopsisExpanded ? 'Show Less' : 'Show More'}
-        </button>
+        {isLongSynopsis && (
+          <button
+            className='show-more-toggle'
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleSynopsis()
+            }}
+          >
+            {isSynopsisExpanded ? 'Show Less' : 'Show More'}
+          </button>
+        )}
         <div className='not-synopsis-details'>
           <p>
             <strong>Genres:</strong>{' '}
@@ -71,7 +77,8 @@ export function ShowCard({ show }: ShowCardProps) {
             <strong>Rating:</strong> {show.rating}
           </p>
           <p>
-            <strong>Score:</strong> {!show.score ? '?': show.score} <strong className='ten'>/ 10</strong>
+            <strong>Score:</strong> {!show.score ? '?' : show.score}{' '}
+            <strong className='ten'>/ 10</strong>
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { searchAnime, getPopularAnime, debounce } from '../services/api'
 import { AnimeShow } from '../types/interfaces'
 import { Footer } from '../components/Footer'
+import { excludedGenres, excludedTypes } from '../services/helper'
 
 export function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -28,6 +29,7 @@ export function Home() {
     setShows([])
     setTooManyRequests(false)
     setError(null)
+    setSuggestedShows([])
 
     try {
       const queryString = `?q=${encodeURIComponent(searchQuery)}`
@@ -138,10 +140,18 @@ export function Home() {
     }
   }, [debouncedHandleScroll])
 
-  const uniqueShows = shows.filter(
-    (show, index, self) =>
-      index === self.findIndex((s) => s.mal_id === show.mal_id)
-  )
+  const uniqueShows = shows
+    .filter(
+      (show, index, self) =>
+        index === self.findIndex((s) => s.mal_id === show.mal_id)
+    )
+    .filter((show) => !excludedTypes.includes(show.type))
+    .filter((show) => {
+      if (show.genres && show.genres.length > 0) {
+        return !show.genres.some((genre) => excludedGenres.includes(genre.name))
+      }
+      return true
+    })
 
   const handleRefresh = () => {
     setPage(1)

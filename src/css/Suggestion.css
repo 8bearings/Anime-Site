@@ -151,7 +151,7 @@ h2 {
 
 .show-suggestion button {
   padding: 0.5rem 1.5rem;
-  background-color: #0ec801;
+  background-color: #000000;
   color: white;
   border: none;
   border-radius: 6px;
@@ -162,7 +162,7 @@ h2 {
 }
 
 .show-suggestion button:hover {
-  background-color: #088000;
+  background-color:  #0ec801;
 }
 
 .selected-genres {
@@ -210,6 +210,23 @@ h2 {
   width: 20px;
   text-align: center;
 }
+
+.show-suggestion > .clear-selections-button {
+  padding: 0.5rem 1.5rem;
+  background-color: #c40101fe;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.show-suggestion > .clear-selections-button:hover {
+  background-color: #681500;
+}
+
 
 .error-message {
   color: red;

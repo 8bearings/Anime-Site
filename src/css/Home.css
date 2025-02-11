@@ -37,13 +37,13 @@
   color: white;
   border-radius: 6px;
   font-weight: 600;
-  transition: background-color 0.2s;
+  /* transition: background-color 0.2s; */
   white-space: nowrap;
 }
 
 .search-button:hover {
-  background-color: #ffffff;
-  color: rgb(67, 67, 67);
+  background-color: #0ec801;
+  color: rgb(0, 0, 0);
 }
 
 .refresh-button {
