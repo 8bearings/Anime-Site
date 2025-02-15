@@ -41,6 +41,7 @@ export function ShowCard({ show }: ShowCardProps) {
         <img src={show.images.jpg.large_image_url} alt={show.title_english} />
       </div>
       <div className='show-overlay'>
+        <p className='click-to'>Click to Open</p>
         <button
           className={`favorite-btn ${favorite ? 'active' : ''}`}
           onClick={onFavClick}
