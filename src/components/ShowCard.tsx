@@ -9,6 +9,9 @@ export function ShowCard({ show }: ShowCardProps) {
     throw new Error('ShowCard must be used within a ShowProvider')
   }
 
+  const showImg = show.images.jpg.large_image_url,
+    showFromYear = show.aired.prop.from.year
+
   const { isFavorite, addToFavorites, removeFromFavorites } = context
   const favorite = isFavorite(show.mal_id)
 
@@ -38,7 +41,7 @@ export function ShowCard({ show }: ShowCardProps) {
       onClick={toggleExpand}
     >
       <div className='thumbnail-poster'>
-        <img src={show.images.jpg.large_image_url} alt={show.title_english} />
+        <img src={showImg} alt={show.title_english} />
       </div>
       <div className='show-overlay'>
         <p className='click-to'>Click to Open</p>
@@ -51,7 +54,7 @@ export function ShowCard({ show }: ShowCardProps) {
       </div>
       <div className='show-info'>
         <h3>{!show.title_english ? show.title : show.title_english}</h3>
-        <p>{show.aired.prop.from.year}</p>
+        <p>{showFromYear}</p>
       </div>
       <div className='show-details'>
         <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>

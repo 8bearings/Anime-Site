@@ -204,7 +204,6 @@ export function Home() {
 
           {isSearching && suggestedShows.length > 0 ? (
             <div>
-              {/* <h3 className='Suggest-h3'>SUGGESTIONS</h3> */}
               <div className='suggested-shows'>
                 {suggestedShows.map((show: AnimeShow) => (
                   <ShowCard show={show} key={show.mal_id} />
