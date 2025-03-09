@@ -140,10 +140,10 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest }) => {
             <span>Rating:</span>
             <select value={rating} onChange={(e) => setRating(e.target.value)}>
               <option value=''>Select Rating</option>
-              <option value='g'>G - All Ages</option>
+              <option value='g'>G / All Ages</option>
               <option value='pg'>PG</option>
               <option value='pg13'>PG-13</option>
-              <option value='r17'>R - 17+ </option>
+              <option value='r17'>R / 17+ </option>
             </select>
           </label>
         </div>
