@@ -37,10 +37,6 @@ npm run dev
 - **Favoriting Anime**: Click the heart icon on any anime card to add it to your favorites. You can view your favorites in the favorites section.
 - **Viewing Details**: Click on any anime card to view more details about the show, including synopsis, genres, and ratings.
 
-## Contributing
-
-Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
