@@ -8,6 +8,7 @@ Anime Finder is a web application built using React and TypeScript that allows u
 
 - **Search Functionality**: Users can search for anime by title or genre.
 - **Favorite Anime**: Users can add anime shows to their favorites for quick access.
+- **Share Anime**: Users can share anime recs with others for quick access.
 - **Responsive Design**: The application is designed to be mobile-friendly, ensuring a seamless experience on various devices.
 - **Genre Suggestions**: Users can view and select from a list of anime genres to refine their search.
 
