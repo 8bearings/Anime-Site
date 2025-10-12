@@ -2,13 +2,19 @@
 import '../css/Home.css'
 import { ShowCard } from '../components/ShowCard'
 import { Suggestion } from '../components/Suggestion'
-import { useState, useEffect } from 'react'
-import { searchAnime, getPopularAnime, debounce } from '../services/api'
+import { useState, useEffect, useRef } from 'react'
+import {
+  searchAnime,
+  getPopularAnime,
+  debounce,
+  getAnimeById,
+} from '../services/api'
 import { AnimeShow } from '../types/interfaces'
 import { Footer } from '../components/Footer'
 import { excludedGenres, excludedTypes } from '../services/helper'
 
 export function Home() {
+  const skipPopularRef = useRef(false)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [shows, setShows] = useState<AnimeShow[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -18,10 +24,50 @@ export function Home() {
   const [isSearching, setIsSearching] = useState<boolean>(false)
   const [suggestedShows, setSuggestedShows] = useState<AnimeShow[]>([])
   const [tooManyRequests, setTooManyRequests] = useState<boolean>(false)
+  const [isPermalink, setIsPermalink] = useState<boolean>(false)
+
+  // Perform a search programmatically (used on initial load when ?q= is present)
+  async function performSearch(query: string, pageNum = 1) {
+    if (!query.trim()) return
+    setLoading(true)
+    setIsSearching(true)
+    setPage(1)
+    setShows([])
+    setTooManyRequests(false)
+    setError(null)
+    setSuggestedShows([])
+    try {
+      const queryString = `?q=${encodeURIComponent(query)}`
+      const searchResults = await searchAnime(queryString, pageNum)
+      if (!searchResults || !searchResults.data) {
+        setError('No results returned from search.')
+        setShows([])
+        setHasMore(false)
+      } else {
+        setShows(searchResults.data)
+        setError(null)
+        setHasMore(
+          Array.isArray(searchResults.data) && searchResults.data.length > 0
+        )
+      }
+    } catch (error: any) {
+      console.error(error)
+      if (error.message && error.message.includes('429')) {
+        setTooManyRequests(true)
+        setError('Too many requests. Please try again later.')
+      } else {
+        setError('Failed to search anime.')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!searchQuery.trim() || loading) return
+
+    skipPopularRef.current = false
 
     setLoading(true)
     setIsSearching(true)
@@ -40,7 +86,8 @@ export function Home() {
       setHasMore(searchResults.data.length > 0)
     } catch (error: any) {
       console.error(error)
-      if (error.response && error.response.status === 429) {
+      // fetch() errors won't have error.response; check message for status code
+      if (error.message && error.message.includes('429')) {
         setTooManyRequests(true)
         setError('Too many requests. Please try again later.')
       } else {
@@ -51,8 +98,55 @@ export function Home() {
     }
   }
 
+  // read ?q= on mount and auto-search
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const id = params.get('id')
+    const q = params.get('q')
+    if (id) {
+      setIsPermalink(true)
+      skipPopularRef.current = true
+      ;(async () => {
+        setLoading(true)
+        setIsSearching(false)
+        setPage(1)
+        setShows([])
+        setTooManyRequests(false)
+        setError(null)
+        try {
+          const res = await getAnimeById(Number(id))
+          const item = res?.data || res
+          if (item) {
+            // Jikan returns an object in data for single anime
+            setShows(Array.isArray(item) ? item : [item])
+            setHasMore(false)
+          } else {
+            setError('Shared show not found.')
+          }
+        } catch (err: any) {
+          console.error(err)
+          if (err.message && err.message.includes('429')) {
+            setTooManyRequests(true)
+            setError('Too many requests. Please try again later.')
+          } else {
+            setError('Failed to load shared show.')
+          }
+        } finally {
+          setLoading(false)
+        }
+      })()
+      return
+    }
+
+    if (q) {
+      const decoded = decodeURIComponent(q)
+      setSearchQuery(decoded)
+      performSearch(decoded, 1)
+    }
+  }, [])
   const loadSearchAnime = async (page: number) => {
     if (loading) return
+    if (skipPopularRef.current) return
     try {
       const queryString = `?q=${encodeURIComponent(searchQuery)}`
       const searchResults = await searchAnime(queryString, page)
@@ -73,6 +167,7 @@ export function Home() {
 
   const loadPopularAnime = async (page: number) => {
     if (loading) return
+    if (skipPopularRef.current) return
 
     try {
       const popularAnime = await getPopularAnime(page)
@@ -128,10 +223,11 @@ export function Home() {
   const debouncedHandleScroll = debounce(handleScroll, 1200)
 
   useEffect(() => {
-    if (!isSearching) {
+    if (!isSearching && !skipPopularRef.current && !isPermalink) {
       loadPopularAnime(page)
     }
-  }, [page, isSearching])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isSearching, isPermalink])
 
   useEffect(() => {
     window.addEventListener('scroll', debouncedHandleScroll)
@@ -154,6 +250,7 @@ export function Home() {
     })
 
   const handleRefresh = () => {
+    skipPopularRef.current = false
     setPage(1)
     setShows([])
     setLoading(true)
