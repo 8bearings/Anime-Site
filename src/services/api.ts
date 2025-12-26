@@ -30,6 +30,16 @@ export const getAnimeById = async (id: number) => {
   return data
 }
 
+export const getAnimeStreaming = async (id: number) => {
+  const response = await fetch(`${BASE_URL}/anime/${id}/streaming`)
+  if (!response.ok) {
+    const text = await response.text().catch(() => '')
+    throw new Error(`Failed to fetch streaming data: ${response.status} ${text}`)
+  }
+  const data = await response.json()
+  return data
+}
+
 export function debounce<F extends (...args: unknown[]) => unknown>(
   func: F,
   delay: number

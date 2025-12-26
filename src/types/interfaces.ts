@@ -1,3 +1,11 @@
+export interface StreamingService {
+  name: string
+  url: string
+}
+
+export interface StreamingResponse {
+  data: StreamingService[]
+}
 export interface NavBarProps {
   onRefresh: () => void
 }
@@ -31,6 +39,7 @@ export interface AnimeShow {
       url: string
     }
   ]
+  streaming?: StreamingService[]
   aired: {
     from: string
     to: string

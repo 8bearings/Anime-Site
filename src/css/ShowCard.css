@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
 /* animated button used for Click to Open */
 .animated-button {
   position: relative;
@@ -80,7 +81,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(124, 2, 2, 0.895);
+  background-color: rgba(13, 13, 13, 0.96);
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.58);
   z-index: 10; /* higher than overlay so details cover overlay buttons when expanded */
@@ -111,9 +112,9 @@
 }
 
 .strong-synopsis {
-  color: #e9cb24;
+  color: #999;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .show-more-toggle {
@@ -154,12 +155,15 @@
   );
   opacity: 0;
   transition: opacity 0.2s;
-  z-index: 2; /* sits below .show-details */
+  z-index: 2;
+  /* sits below .show-details */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
+  justify-content: center;
+  /* Center vertically */
+  align-items: center;
+  /* Center horizontally */
   padding: 1rem;
 }
 
@@ -182,6 +186,27 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
+}
+
+.show-card.expanded .click-to {
+  z-index: 13;
+  top: auto;
+  bottom: 1rem;
+  left: 1rem;
+  right: auto;
+  transform: none;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  pointer-events: auto;
+  display: flex;
+}
+
+
+.show-card:hover .click-to,
+.show-card:focus-within .click-to {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.2s;
 }
 
 .show-card:hover .show-overlay {
@@ -249,15 +274,18 @@
   font-size: 1rem;
   color: rgb(255, 255, 255);
   -webkit-text-stroke-width: 0.2px;
-  -webkit-text-stroke-color: rgb(255, 255, 255);
+  -webkit-text-stroke-color: rgb(62, 62, 62);
+  max-height: 100px;
 }
+
 .not-synopsis-details > p > strong {
-  color: #e9cb24;
+  color: #999;
 }
 
 .ten {
   font-weight: 400;
 }
+
 .share-btn {
   position: absolute;
   bottom: 1rem;
@@ -293,7 +321,8 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  z-index: 11; /* place above the details panel so it remains visible */
+  z-index: 11;
+  /* place above the details panel so it remains visible */
 }
 
 .share-btn:hover {
@@ -303,6 +332,51 @@
 .share-btn.copied {
   background-color: #0ec801;
   color: #000;
+}
+
+.streaming-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.streaming-section > p:first-child {
+  margin-bottom: 0.75rem;
+}
+
+.streaming-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.streaming-link {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background-color: rgba(14, 200, 1, 0.15);
+  color: #0ca802;
+  border: 1.0px solid #0ec801;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.69rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.streaming-link:hover {
+  background-color: #0ec801;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(14, 200, 1, 0.3);
+}
+
+.streaming-loading,
+.no-streaming {
+  color: #999;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 0.25rem;
 }
 
 @media (max-width: 768px) {
@@ -352,10 +426,29 @@
     font-size: 0.9rem;
   }
 
+  .not-synopsis-details > p {
+    font-size: 0.85rem;
+  }
+
   .show-more-toggle {
     font-size: 0.9rem;
   }
+
+  .streaming-section {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .streaming-services {
+    gap: 0.4rem;
+  }
+
+  .streaming-link {
+    font-size: 0.76rem;
+    padding: 0.3rem 0.7rem;
+  }
 }
+
 @media (max-width: 480px) {
   .show-card {
     max-width: 100%;
@@ -367,10 +460,12 @@
     min-width: 64px;
     height: 44px;
     font-size: 0.9rem;
-    right: 1rem; /* keep anchored to bottom-right */
+    right: 1rem;
+    /* keep anchored to bottom-right */
     bottom: 1rem;
     padding: 0 10px;
   }
+
   .show-info {
     padding: 1rem;
     padding-top: 0;
@@ -396,10 +491,24 @@
   }
 
   .strong-synopsis {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+  }
+
+  .not-synopsis-details > p {
+    font-size: 0.75rem;
   }
 
   .show-more-toggle {
+    font-size: 0.8rem;
+  }
+
+  .streaming-link {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .streaming-loading,
+  .no-streaming {
     font-size: 0.8rem;
   }
 }

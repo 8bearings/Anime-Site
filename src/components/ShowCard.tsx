@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { ShowCardProps } from '../types/interfaces'
+import { useState, useEffect } from 'react'
+import { ShowCardProps, StreamingService } from '../types/interfaces'
 import '../css/ShowCard.css'
 import { useShowContext } from '../contexts/ShowContext'
+import { getAnimeStreaming } from '../services/api'
 
 export function ShowCard({ show }: ShowCardProps) {
   const context = useShowContext()
@@ -10,7 +11,7 @@ export function ShowCard({ show }: ShowCardProps) {
   }
 
   const showImg = show.images.jpg.large_image_url,
-    showFromYear = show.aired.prop.from.year
+    showFromYear = show.aired.prop.from.year || '?'
 
   const { isFavorite, addToFavorites, removeFromFavorites } = context
   const favorite = isFavorite(show.mal_id)
@@ -18,6 +19,32 @@ export function ShowCard({ show }: ShowCardProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isSynopsisExpanded, setIsSynopsisExpanded] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
+  const [streamingServices, setStreamingServices] = useState<
+    StreamingService[]
+  >([])
+  const [loadingStreaming, setLoadingStreaming] = useState<boolean>(false)
+  const [streamingError, setStreamingError] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isExpanded && streamingServices.length === 0 && !streamingError) {
+      fetchStreamingServices()
+    }
+  }, [isExpanded])
+
+  // ✅ ADD THIS FUNCTION TO FETCH STREAMING DATA
+  const fetchStreamingServices = async () => {
+    setLoadingStreaming(true)
+    setStreamingError(false)
+    try {
+      const response = await getAnimeStreaming(show.mal_id)
+      setStreamingServices(response.data || [])
+    } catch (error) {
+      console.error('Failed to fetch streaming services:', error)
+      setStreamingError(true)
+    } finally {
+      setLoadingStreaming(false)
+    }
+  }
 
   function toggleExpand() {
     setIsExpanded((prev) => !prev)
@@ -39,7 +66,6 @@ export function ShowCard({ show }: ShowCardProps) {
 
     const title = show.title_english || show.title || ''
     const base = window.location.origin + window.location.pathname
-    // Prefer exact id permalinks; include q for readability
     const url = `${base}?id=${show.mal_id}&q=${encodeURIComponent(title)}`
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -50,7 +76,6 @@ export function ShowCard({ show }: ShowCardProps) {
           setTimeout(() => setCopied(false), 2000)
         })
         .catch(() => {
-          // fallback
           window.prompt('Copy this link', url)
         })
     } else {
@@ -67,7 +92,7 @@ export function ShowCard({ show }: ShowCardProps) {
       onClick={toggleExpand}
     >
       <div className='thumbnail-poster'>
-        <img src={showImg} alt={show.title_english} />
+        <img src={showImg} alt={show.title_english || show.title} />
       </div>
       <div className='show-overlay'>
         <button
@@ -98,7 +123,7 @@ export function ShowCard({ show }: ShowCardProps) {
         title='Copy share link'
         aria-label='Share'
       >
-        <span className='text'>{copied ? 'Copied!' : 'Share'}</span>
+        <span className='text' aria-live="polite">{copied ? 'Copied!' : 'Share'}</span>
       </button>
       <div className='show-info'>
         <h3>{!show.title_english ? show.title : show.title_english}</h3>
@@ -132,6 +157,36 @@ export function ShowCard({ show }: ShowCardProps) {
             <strong>Score:</strong> {!show.score ? '?' : show.score}{' '}
             <strong className='ten'>/ 10</strong>
           </p>
+
+          {/* ✅ ADD THIS NEW STREAMING SECTION */}
+
+          <div className='streaming-section'>
+            <p>
+              <strong>Available on:</strong>
+            </p>
+            {loadingStreaming ? (
+              <p className='streaming-loading'>Loading streaming services...</p>
+            ) : streamingError ? (
+              <p className='no-streaming'>Unable to load streaming info</p>
+            ) : streamingServices.length > 0 ? (
+              <div className='streaming-services'>
+                {streamingServices.map((service, index) => (
+                  <a
+                    key={`${service.name}-${index}`}
+                    href={service.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='streaming-link'
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {service.name}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className='no-streaming'>No streaming information available</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
