@@ -132,6 +132,7 @@ export function ShowCard({ show }: ShowCardProps) {
         <p>{showFromYear}</p>
       </div>
       <div className='show-details'>
+        <div className='show-details-flex'>
         <div className={`synopsis ${isSynopsisExpanded ? 'expanded' : ''}`}>
           <strong className='strong-synopsis'>Description: </strong>
           {show.synopsis}
@@ -199,6 +200,7 @@ export function ShowCard({ show }: ShowCardProps) {
         )}
         </div>
       </div>
+    </div>
     </div>
   )
 }
