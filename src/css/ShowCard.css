@@ -379,6 +379,16 @@
   margin-top: 0.25rem;
 }
 
+.not-synopsis-details-wrapper {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+}
+
+.not-synopsis-details-wrapper.visible {
+  max-height: 150px; 
+  opacity: 1;
+}
 @media (max-width: 768px) {
   .show-card {
     font-size: 0.9rem;

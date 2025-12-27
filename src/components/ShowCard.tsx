@@ -123,7 +123,9 @@ export function ShowCard({ show }: ShowCardProps) {
         title='Copy share link'
         aria-label='Share'
       >
-        <span className='text' aria-live="polite">{copied ? 'Copied!' : 'Share'}</span>
+        <span className='text' aria-live='polite'>
+          {copied ? 'Copied!' : 'Share'}
+        </span>
       </button>
       <div className='show-info'>
         <h3>{!show.title_english ? show.title : show.title_english}</h3>
@@ -145,48 +147,56 @@ export function ShowCard({ show }: ShowCardProps) {
             {isSynopsisExpanded ? 'Show Less' : 'Show More'}
           </button>
         )}
-        <div className='not-synopsis-details'>
-          <p>
-            <strong>Genres:</strong>{' '}
-            {show.genres.map((genre) => genre.name).join(', ')}
-          </p>
-          <p>
-            <strong>Rating:</strong> {show.rating}
-          </p>
-          <p>
-            <strong>Score:</strong> {!show.score ? '?' : show.score}{' '}
-            <strong className='ten'>/ 10</strong>
-          </p>
-
-          {/* ✅ ADD THIS NEW STREAMING SECTION */}
-
-          <div className='streaming-section'>
+        <div
+          className={`not-synopsis-details-wrapper${
+            !isSynopsisExpanded ? ' visible' : ''
+          }`}
+        >
+        {!isSynopsisExpanded && (
+          <div className='not-synopsis-details'>
             <p>
-              <strong>Available on:</strong>
+              <strong>Genres:</strong>{' '}
+              {show.genres.map((genre) => genre.name).join(', ')}
             </p>
-            {loadingStreaming ? (
-              <p className='streaming-loading'>Loading streaming services...</p>
-            ) : streamingError ? (
-              <p className='no-streaming'>Unable to load streaming info</p>
-            ) : streamingServices.length > 0 ? (
-              <div className='streaming-services'>
-                {streamingServices.map((service, index) => (
-                  <a
-                    key={`${service.name}-${index}`}
-                    href={service.url}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='streaming-link'
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {service.name}
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <p className='no-streaming'>No streaming information available</p>
-            )}
+            <p>
+              <strong>Rating:</strong> {show.rating}
+            </p>
+            <p>
+              <strong>Score:</strong> {!show.score ? '?' : show.score}{' '}
+              <strong className='ten'>/ 10</strong>
+            </p>
+
+            <div className='streaming-section'>
+              <p>
+                <strong>Available on:</strong>
+              </p>
+              {loadingStreaming ? (
+                <p className='streaming-loading'>
+                  Loading streaming services...
+                </p>
+              ) : streamingError ? (
+                <p className='no-streaming'>Unable to load streaming info</p>
+              ) : streamingServices.length > 0 ? (
+                <div className='streaming-services'>
+                  {streamingServices.map((service, index) => (
+                    <a
+                      key={`${service.name}-${index}`}
+                      href={service.url}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='streaming-link'
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {service.name}
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <p className='no-streaming'>No streaming information found</p>
+              )}
+            </div>
           </div>
+        )}
         </div>
       </div>
     </div>
