@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import '../css/Home.css'
 import { ShowCard } from '../components/ShowCard'
+import { SkeletonCard } from '../components/SkeletonCard'
 import { Suggestion } from '../components/Suggestion'
 import { useState, useEffect, useRef } from 'react'
 import {
@@ -15,6 +16,7 @@ import { excludedGenres, excludedTypes } from '../services/helper'
 
 export function Home() {
   const skipPopularRef = useRef(false)
+  const loadingRef = useRef(false) 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [shows, setShows] = useState<AnimeShow[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -86,7 +88,6 @@ export function Home() {
       setHasMore(searchResults.data.length > 0)
     } catch (error: any) {
       console.error(error)
-      // fetch() errors won't have error.response; check message for status code
       if (error.message && error.message.includes('429')) {
         setTooManyRequests(true)
         setError('Too many requests. Please try again later.')
@@ -98,7 +99,6 @@ export function Home() {
     }
   }
 
-  // read ?q= on mount and auto-search
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const id = params.get('id')
@@ -117,7 +117,6 @@ export function Home() {
           const res = await getAnimeById(Number(id))
           const item = res?.data || res
           if (item) {
-            // Jikan returns an object in data for single anime
             setShows(Array.isArray(item) ? item : [item])
             setHasMore(false)
           } else {
@@ -144,9 +143,12 @@ export function Home() {
       performSearch(decoded, 1)
     }
   }, [])
+
   const loadSearchAnime = async (page: number) => {
-    if (loading) return
-    if (skipPopularRef.current) return
+    if (loadingRef.current || !hasMore) return
+    loadingRef.current = true
+    setLoading(true)
+    
     try {
       const queryString = `?q=${encodeURIComponent(searchQuery)}`
       const searchResults = await searchAnime(queryString, page)
@@ -162,12 +164,14 @@ export function Home() {
       }
     } finally {
       setLoading(false)
+      loadingRef.current = false
     }
   }
 
   const loadPopularAnime = async (page: number) => {
-    if (loading) return
-    if (skipPopularRef.current) return
+    if (loadingRef.current || !hasMore) return
+    loadingRef.current = true
+    setLoading(true)
 
     try {
       const popularAnime = await getPopularAnime(page)
@@ -195,15 +199,17 @@ export function Home() {
       }
     } finally {
       setLoading(false)
+      loadingRef.current = false
     }
   }
 
   const handleScroll = () => {
-    if (loading || !hasMore || tooManyRequests) return
+    if (loadingRef.current || !hasMore || tooManyRequests) return
 
+    // More aggressive threshold: trigger when 1200px from bottom
     const nearBottom =
       window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 700
+      document.documentElement.scrollHeight - 1200
 
     setIsNearBottom(nearBottom)
 
@@ -215,11 +221,10 @@ export function Home() {
       } else {
         loadPopularAnime(nextPage)
       }
-      return nextPage
     }
   }
 
-  const debouncedHandleScroll = debounce(handleScroll, 1200)
+  const debouncedHandleScroll = debounce(handleScroll, 400)
 
   useEffect(() => {
     if (!isSearching && !skipPopularRef.current && !isPermalink) {
@@ -233,7 +238,7 @@ export function Home() {
     return () => {
       window.removeEventListener('scroll', debouncedHandleScroll)
     }
-  }, [debouncedHandleScroll, loading, hasMore, tooManyRequests, page, isSearching])
+  }, [debouncedHandleScroll, hasMore, tooManyRequests, page, isSearching])
 
   const uniqueShows = shows
     .filter(
@@ -308,21 +313,27 @@ export function Home() {
             </div>
           ) : (
             <div className='shows-grid'>
-              {loading ? (
+              {loading && page === 1 ? (
                 <div className='loading'></div>
               ) : error ? (
                 <div className='error-message'>{error}</div>
               ) : uniqueShows.length > 0 ? (
-                uniqueShows.map((show: AnimeShow) => (
-                  <ShowCard show={show} key={show.mal_id} />
-                ))
+                <>
+                  {uniqueShows.map((show: AnimeShow) => (
+                    <ShowCard show={show} key={show.mal_id} />
+                  ))}
+                  {hasMore && isNearBottom && loading && (
+                    <>
+                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <SkeletonCard key={`skeleton-${n}`} />
+                      ))}
+                    </>
+                  )}
+                </>
               ) : (
                 <p>No shows found.</p>
               )}
             </div>
-          )}
-          {!error && suggestedShows.length === 0 && hasMore && isNearBottom && (
-            <div className='loading'></div>
           )}
         </div>
       </div>
