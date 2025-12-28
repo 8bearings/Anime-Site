@@ -25,8 +25,8 @@ export function Home() {
   const [suggestedShows, setSuggestedShows] = useState<AnimeShow[]>([])
   const [tooManyRequests, setTooManyRequests] = useState<boolean>(false)
   const [isPermalink, setIsPermalink] = useState<boolean>(false)
+  const [isNearBottom, setIsNearBottom] = useState(false)
 
-  // Perform a search programmatically (used on initial load when ?q= is present)
   async function performSearch(query: string, pageNum = 1) {
     if (!query.trim()) return
     setLoading(true)
@@ -198,17 +198,16 @@ export function Home() {
     }
   }
 
-  let bottom =
-    window.innerHeight + window.scrollY >=
-    document.documentElement.scrollHeight - 100
-
   const handleScroll = () => {
     if (loading || !hasMore || tooManyRequests) return
 
-    bottom =
+    const nearBottom =
       window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 100
-    if (bottom) {
+      document.documentElement.scrollHeight - 700
+
+    setIsNearBottom(nearBottom)
+
+    if (nearBottom) {
       const nextPage = page + 1
       setPage(nextPage)
       if (isSearching) {
@@ -234,7 +233,7 @@ export function Home() {
     return () => {
       window.removeEventListener('scroll', debouncedHandleScroll)
     }
-  }, [debouncedHandleScroll])
+  }, [debouncedHandleScroll, loading, hasMore, tooManyRequests, page, isSearching])
 
   const uniqueShows = shows
     .filter(
@@ -322,7 +321,7 @@ export function Home() {
               )}
             </div>
           )}
-          {!error && suggestedShows.length === 0 && hasMore && bottom && (
+          {!error && suggestedShows.length === 0 && hasMore && isNearBottom && (
             <div className='loading'></div>
           )}
         </div>
