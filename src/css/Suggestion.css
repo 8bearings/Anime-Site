@@ -273,7 +273,7 @@ h2 {
 
   .show-suggestion input,
   .show-suggestion select {
-    font-size: 0.9rem;
+    font-size: 16px; /* Prevent iOS zoom - must be at least 16px */
   }
 
   .show-suggestion button {
