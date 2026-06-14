@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { searchAnime, buildAnimeQuery } from '../services/api'
 import { AnimeShow } from '../types/interfaces'
 import { debounce, getDisplayTitle } from '../services/helper'
@@ -42,6 +42,15 @@ export function SearchAutocomplete({ value, onChange, onSelect }: Props) {
     () => debounce(fetchSuggestions, 500),
     [fetchSuggestions]
   )
+
+  // Close the dropdown when the query is cleared/shortened externally
+  // (Clear button, selecting an item) — those bypass handleChange.
+  useEffect(() => {
+    if (value.trim().length < 3) {
+      setOpen(false)
+      setSuggestions([])
+    }
+  }, [value])
 
   function handleChange(v: string) {
     suppressRef.current = false

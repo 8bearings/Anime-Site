@@ -110,17 +110,26 @@ export interface ShowContextType {
 }
 
 
-/** Filter/sort state propagated from Suggestion up to Home so text search can use them. */
+/** Filter/sort state propagated from Suggestion up to Home so text search can use them.
+ * Field names mirror AnimeQuery so it can be spread straight into buildAnimeQuery. */
 export interface ActiveFilters {
   orderBy?: string
   sort?: 'asc' | 'desc'
   status?: string
   type?: string
+  genres?: string[]
+  minScore?: number
+  maxScore?: number
+  startDate?: string
+  endDate?: string
+  rating?: string
+  sfw?: boolean
 }
 
 export interface SuggestionProps {
   onSuggest: (suggestedShows: AnimeShow[]) => void
   onFiltersChange?: (filters: ActiveFilters) => void
+  onAllowExplicitChange?: (allow: boolean) => void
 }
 
 /// COMPLETE RESPONSE from API

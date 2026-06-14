@@ -70,6 +70,48 @@
   border-radius: 6px;
 }
 
+.results-context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 700px;
+  margin: 0 auto 0.5rem;
+  padding: 0.5rem 1rem;
+  font-family: Oswald;
+}
+
+.results-context-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.results-context-label strong {
+  color: #fff;
+}
+
+.clear-results-btn {
+  flex-shrink: 0;
+  padding: 0.3rem 0.9rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid #333;
+  border-radius: 999px;
+  font-family: Oswald;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.clear-results-btn:hover {
+  color: #000;
+  background: #0ec801;
+  border-color: transparent;
+}
+
 .shows-grid,
 .suggested-shows {
   display: grid;

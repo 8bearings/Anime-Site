@@ -67,6 +67,7 @@ export function Home() {
   const [tooManyRequests, setTooManyRequests] = useState(false)
   const [isNearBottom, setIsNearBottom] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [allowExplicit, setAllowExplicit] = useState(false)
 
   // Season browser state
   const [showSeasonPicker, setShowSeasonPicker] = useState(false)
@@ -290,12 +291,13 @@ export function Home() {
         )
         .filter((show) => !excludedTypes.includes(show.type))
         .filter((show) => {
+          if (allowExplicit) return true
           if (show.genres && show.genres.length > 0) {
             return !show.genres.some((genre) => excludedGenres.includes(genre.name))
           }
           return true
         }),
-    [shows]
+    [shows, allowExplicit]
   )
 
   function handleShowSuggestion(suggested: AnimeShow[]) {
@@ -396,8 +398,24 @@ export function Home() {
             <Suggestion
               onSuggest={handleShowSuggestion}
               onFiltersChange={handleFiltersChange}
+              onAllowExplicitChange={setAllowExplicit}
             />
           </div>
+
+          {(feedMode === 'search' || feedMode === 'suggestion') && (
+            <div className='results-context'>
+              <span className='results-context-label'>
+                {feedMode === 'search' ? (
+                  <>Results for <strong>“{searchQuery}”</strong></>
+                ) : (
+                  'Filtered suggestions'
+                )}
+              </span>
+              <button onClick={handleRefresh} className='clear-results-btn'>
+                ✕ Clear
+              </button>
+            </div>
+          )}
 
           {error && (
             <div className='error-message'>

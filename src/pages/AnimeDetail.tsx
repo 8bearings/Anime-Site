@@ -65,7 +65,8 @@ export function AnimeDetail() {
 
   const displayTitle = getDisplayTitle(show)
   const favorite = context?.isFavorite(show.mal_id)
-  const hasTrailer = !!(show.trailer?.youtube_id && show.trailer?.embed_url)
+  const hasTrailer = !!show.trailer?.embed_url
+  const trailerId = show.trailer?.embed_url?.split('/embed/')[1]?.split('?')[0]
 
   return (
     <div className='anime-detail'>
@@ -146,7 +147,7 @@ export function AnimeDetail() {
           {trailerPlaying ? (
             <div className='trailer-iframe-wrapper'>
               <iframe
-                src={`${show.trailer!.embed_url}?autoplay=1`}
+                src={show.trailer!.embed_url!}
                 allow='autoplay; encrypted-media; fullscreen'
                 allowFullScreen
                 loading='lazy'
@@ -168,7 +169,7 @@ export function AnimeDetail() {
               }}
             >
               <img
-                src={`https://img.youtube.com/vi/${show.trailer!.youtube_id}/hqdefault.jpg`}
+                src={`https://img.youtube.com/vi/${trailerId}/hqdefault.jpg`}
                 alt={`${displayTitle} trailer`}
                 loading='lazy'
               />

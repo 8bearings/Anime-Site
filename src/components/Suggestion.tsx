@@ -1,6 +1,6 @@
 import '../css/Suggestion.css'
-import React, { useState, useEffect } from 'react'
-import { SuggestionProps } from '../types/interfaces'
+import React, { useState, useEffect, useMemo } from 'react'
+import { SuggestionProps, ActiveFilters } from '../types/interfaces'
 import { searchAnime, buildAnimeQuery } from '../services/api'
 import { genreOptions } from '../services/helper'
 
@@ -12,7 +12,7 @@ const SORT_OPTIONS = [
   { label: 'Title (A–Z)', value: 'title', orderBy: 'title', sort: 'asc' as const },
 ]
 
-export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChange }) => {
+export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChange, onAllowExplicitChange }) => {
   const [genres, setGenres] = useState<string[]>([])
   const [minScore, setMinScore] = useState<number>(0)
   const [maxScore, setMaxScore] = useState<number>(10)
@@ -20,6 +20,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
   const [endYear, setEndYear] = useState<string>('')
   const [rating, setRating] = useState<string>('')
   const [sfw, setSfw] = useState<boolean>(true)
+  const [includeAdult, setIncludeAdult] = useState<boolean>(false)
   const [sortValue, setSortValue] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<string>('')
   const [typeFilter, setTypeFilter] = useState<string>('')
@@ -29,18 +30,32 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
 
   const MAX_GENRES = 3
 
-  // Propagate sort/status/type up to Home so text search also picks them up
-  useEffect(() => {
-    if (!onFiltersChange) return
-    const opt = SORT_OPTIONS.find(o => o.value === sortValue)
-    onFiltersChange({
+  // Single source of truth for the active query — reused by Suggest Shows and
+  // propagated up so text search applies the same filters.
+  const currentFilters = useMemo<ActiveFilters>(() => {
+    const opt = SORT_OPTIONS.find((o) => o.value === sortValue)
+    return {
       orderBy: opt?.orderBy,
       sort: opt?.sort,
       status: statusFilter || undefined,
       type: typeFilter || undefined,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortValue, statusFilter, typeFilter])
+      genres: genres.length > 0 ? genres : undefined,
+      minScore: minScore > 0 ? minScore : undefined,
+      maxScore: maxScore < 10 ? maxScore : undefined,
+      startDate: startYear ? `${startYear}-01-01` : undefined,
+      endDate: endYear ? `${endYear}-12-31` : undefined,
+      rating: rating || undefined,
+      sfw,
+    }
+  }, [sortValue, statusFilter, typeFilter, genres, minScore, maxScore, startYear, endYear, rating, sfw])
+
+  useEffect(() => {
+    onFiltersChange?.(currentFilters)
+  }, [currentFilters, onFiltersChange])
+
+  useEffect(() => {
+    onAllowExplicitChange?.(includeAdult)
+  }, [includeAdult, onAllowExplicitChange])
 
   const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value
@@ -68,22 +83,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
     setError(null)
 
     try {
-      const opt = SORT_OPTIONS.find(o => o.value === sortValue)
-      const searchResults = await searchAnime(
-        buildAnimeQuery({
-          genres: genres.length > 0 ? genres : undefined,
-          minScore: minScore > 0 ? minScore : undefined,
-          maxScore: maxScore < 10 ? maxScore : undefined,
-          startDate: startYear ? `${startYear}-01-01` : undefined,
-          endDate: endYear ? `${endYear}-12-31` : undefined,
-          rating: rating || undefined,
-          sfw,
-          status: statusFilter || undefined,
-          type: typeFilter || undefined,
-          orderBy: opt?.orderBy,
-          sort: opt?.sort,
-        })
-      )
+      const searchResults = await searchAnime(buildAnimeQuery(currentFilters))
 
       if (searchResults.data && searchResults.data.length > 0) {
         onSuggest(searchResults.data)
@@ -106,20 +106,40 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
     setEndYear('')
     setRating('')
     setSfw(true)
+    setIncludeAdult(false)
     setSortValue('')
     setStatusFilter('')
     setTypeFilter('')
+    setError(null)
   }
+
+  const activeFilterCount = [
+    sortValue !== '',
+    statusFilter !== '',
+    typeFilter !== '',
+    genres.length > 0,
+    minScore > 0,
+    maxScore < 10,
+    startYear !== '',
+    endYear !== '',
+    rating !== '',
+    !sfw,
+    includeAdult,
+  ].filter(Boolean).length
 
   return (
     <div>
       <button onClick={() => setIsOpen(!isOpen)} className='toggle-suggestion'>
         {isOpen ? 'Hide Options' : 'Need Some Direction?'}
+        {!isOpen && activeFilterCount > 0 && (
+          <span className='filter-count'>{activeFilterCount}</span>
+        )}
       </button>
 
       <div className={`show-suggestion ${isOpen ? 'active' : ''}`}>
         <h2>It's Time to Find!</h2>
 
+        <div className='suggestion-grid'>
         {/* ── Sort ── */}
         <div>
           <label>
@@ -163,7 +183,7 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
         </div>
 
         {/* ── Genre ── */}
-        <div>
+        <div className='full-width'>
           <label>
             <span>Genre:</span>
             <select
@@ -278,6 +298,22 @@ export const Suggestion: React.FC<SuggestionProps> = ({ onSuggest, onFiltersChan
               onChange={(e) => setSfw(e.target.checked)}
             />
           </label>
+        </div>
+
+        <div>
+          <label className='sfw'>
+            <span>Include Adult Content:</span>
+            <input
+              type='checkbox'
+              checked={includeAdult}
+              onChange={(e) => {
+                const v = e.target.checked
+                setIncludeAdult(v)
+                if (v) setSfw(false)
+              }}
+            />
+          </label>
+        </div>
         </div>
 
         <button onClick={handleSuggest} disabled={loading}>
