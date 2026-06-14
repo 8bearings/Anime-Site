@@ -1,3 +1,5 @@
+import { AnimeShow } from '../types/interfaces'
+
 export const genreOptions = [
   { id: '1', name: 'Action' },
   { id: '2', name: 'Adventure' },
@@ -22,6 +24,22 @@ export const genreOptions = [
 
 export const excludedTypes: string[] = ['Music', 'PV']
 export const excludedGenres: string[] = ['Hentai']
+
+export function getDisplayTitle(show: Pick<AnimeShow, 'title' | 'title_english'>): string {
+  return show.title_english || show.title || ''
+}
+
+export function debounce<A extends unknown[]>(
+  func: (...args: A) => unknown,
+  delay: number
+): (...args: A) => void {
+  let timeout: ReturnType<typeof setTimeout>
+
+  return (...args: A) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), delay)
+  }
+}
 
 //FULL LIST OF GENRES
 /*

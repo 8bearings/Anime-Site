@@ -4,6 +4,8 @@ export interface StreamingService {
 }
 
 export interface StreamingResponse {
+  status: number | string
+  message?: string
   data: StreamingService[]
 }
 export interface NavBarProps {
@@ -56,6 +58,48 @@ export interface AnimeShow {
       }
     }
   }
+  trailer?: {
+    youtube_id: string | null
+    url: string | null
+    embed_url: string | null
+  }
+  episodes?: number | null
+  status?: string
+  airing?: boolean
+  studios?: { mal_id: number; type: string; name: string; url: string }[]
+  season?: string | null
+  year?: number | null
+  rank?: number | null
+  scored_by?: number | null
+}
+
+export interface Pagination {
+  last_visible_page: number
+  has_next_page: boolean
+  current_page: number
+  items: {
+    count: number
+    total: number
+    per_page: number
+  }
+}
+
+export interface AnimeListResponse {
+  data: AnimeShow[]
+  pagination?: Pagination
+}
+
+export interface AnimeByIdResponse {
+  data: AnimeShow
+}
+
+export interface SeasonArchiveEntry {
+  year: number
+  seasons: string[]
+}
+
+export interface SeasonArchiveResponse {
+  data: SeasonArchiveEntry[]
 }
 
 export interface ShowContextType {
@@ -66,8 +110,17 @@ export interface ShowContextType {
 }
 
 
+/** Filter/sort state propagated from Suggestion up to Home so text search can use them. */
+export interface ActiveFilters {
+  orderBy?: string
+  sort?: 'asc' | 'desc'
+  status?: string
+  type?: string
+}
+
 export interface SuggestionProps {
-  onSuggest: (suggestedShows: AnimeShow[]) => void 
+  onSuggest: (suggestedShows: AnimeShow[]) => void
+  onFiltersChange?: (filters: ActiveFilters) => void
 }
 
 /// COMPLETE RESPONSE from API

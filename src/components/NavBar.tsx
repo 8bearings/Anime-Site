@@ -6,7 +6,7 @@ export function NavBar({ onRefresh }: NavBarProps) {
   const location = useLocation()
 
   const handleClick = (e: React.MouseEvent) => {
-    if (location.pathname === '/Anime-Site') {
+    if (location.pathname === '/') {
       e.preventDefault()
       onRefresh()
     }
@@ -15,12 +15,12 @@ export function NavBar({ onRefresh }: NavBarProps) {
   return (
     <nav className='navbar'>
       <div className='navbar-brand'>
-        <Link to='/Anime-Site' onClick={handleClick}>
+        <Link to='/' onClick={handleClick}>
           Anime Finder
         </Link>
       </div>
       <div className='navbar-links'>
-        <Link to='/Anime-Site' onClick={handleClick} className='nav-link'>
+        <Link to='/' onClick={handleClick} className='nav-link'>
           Home
         </Link>
         <Link to='/favorites' className='nav-link'>

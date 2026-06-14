@@ -7,12 +7,22 @@ export const useShowContext = () => useContext(ShowContext)
 
 export const ShowProvider = ({ children }: { children: React.ReactNode }) => {
   const [favorites, setFavorites] = useState<AnimeShow[]>(() => {
-    const storedFavs = localStorage.getItem('favorites')
-    return storedFavs ? JSON.parse(storedFavs) : []
+    try {
+      const storedFavs = localStorage.getItem('favorites')
+      const parsed = storedFavs ? JSON.parse(storedFavs) : []
+      return Array.isArray(parsed) ? parsed : []
+    } catch (err) {
+      console.error('Failed to read favorites from localStorage:', err)
+      return []
+    }
   })
 
   useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favorites))
+    try {
+      localStorage.setItem('favorites', JSON.stringify(favorites))
+    } catch (err) {
+      console.error('Failed to save favorites to localStorage:', err)
+    }
   }, [favorites])
 
   const addToFavorites = (show: AnimeShow) => {

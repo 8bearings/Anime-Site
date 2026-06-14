@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+.anime-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+  font-family: Oswald;
+  color: white;
+}
+
+.detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: 1px solid #444;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Oswald;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.detail-back:hover {
+  color: white;
+  border-color: #888;
+}
+
+.detail-hero {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.detail-poster {
+  width: 220px;
+  min-width: 220px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.detail-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.detail-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  line-height: 1.2;
+}
+
+.detail-subtitle {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  align-items: center;
+}
+
+.detail-score {
+  color: #0ec801;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.detail-ep-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.detail-info p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0.2rem 0;
+}
+
+.detail-info strong {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.detail-actions {
+  margin-top: 1.25rem;
+}
+
+.detail-fav-btn {
+  padding: 0.5rem 1.2rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: transparent;
+  color: white;
+  font-family: Oswald;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.detail-fav-btn:hover,
+.detail-fav-btn.active {
+  background: #0ec801;
+  color: #000;
+  border-color: #0ec801;
+}
+
+.detail-streaming {
+  margin-top: 1rem;
+}
+
+.detail-streaming > strong {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.detail-streaming-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Sections (trailer, synopsis) ── */
+.detail-section {
+  margin-bottom: 2rem;
+}
+
+.detail-section h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.detail-section p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+/* ── Trailer (reuse ShowCard classes via import) ── */
+.detail-section .trailer-thumb {
+  max-width: 640px;
+}
+
+/* ── Loading / error ── */
+.detail-loading {
+  margin: 4rem auto;
+  width: 40px;
+  height: 40px;
+  border: 10px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: detail-spin 1s ease-in-out infinite;
+}
+
+@keyframes detail-spin {
+  to { transform: rotate(360deg); }
+}
+
+.detail-error {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #ff4757;
+  font-family: Oswald;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .detail-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .detail-poster {
+    width: 160px;
+    min-width: 160px;
+  }
+
+  .detail-meta {
+    justify-content: center;
+  }
+
+  .detail-actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .detail-title {
+    font-size: 1.5rem;
+  }
+
+  .detail-streaming {
+    text-align: left;
+  }
+}

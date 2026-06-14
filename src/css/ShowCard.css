@@ -398,8 +398,98 @@
 }
 
 .not-synopsis-details-wrapper.visible {
-  max-height: 150px; 
+  max-height: 300px;
   opacity: 1;
+}
+
+/* ── Trailer ────────────────────────────────────────────────────── */
+
+.trailer-section {
+  width: 100%;
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
+}
+
+.trailer-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+}
+
+.trailer-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  transition: opacity 0.2s;
+}
+
+.trailer-thumb:hover img {
+  opacity: 1;
+}
+
+.trailer-play-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  /* unicode ▶ sits slightly right of center optically */
+  padding-right: 2px;
+}
+
+.trailer-iframe-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.trailer-iframe-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ── Detail page link on card face ─────────────────────────────── */
+.detail-link {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  align-self: flex-start;
+  transition: color 0.15s;
+}
+
+.detail-link:hover {
+  color: #0ec801;
+}
+
+/* ── Episode / status line ──────────────────────────────────────── */
+
+.episode-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: #aaa;
+  margin-bottom: 0.3rem;
+}
+
+.airing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #0ec801;
+  flex-shrink: 0;
 }
 @media (max-width: 768px) {
   .show-card {
