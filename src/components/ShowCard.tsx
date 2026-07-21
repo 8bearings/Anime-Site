@@ -22,7 +22,9 @@ export function ShowCard({ show }: ShowCardProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [isSynopsisExpanded, setIsSynopsisExpanded] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
-  const [streamingServices, setStreamingServices] = useState<StreamingService[]>([])
+  const [streamingServices, setStreamingServices] = useState<
+    StreamingService[]
+  >([])
   const [loadingStreaming, setLoadingStreaming] = useState<boolean>(false)
   const [streamingError, setStreamingError] = useState<boolean>(false)
   const [trailerPlaying, setTrailerPlaying] = useState<boolean>(false)
@@ -76,7 +78,7 @@ export function ShowCard({ show }: ShowCardProps) {
     e.preventDefault()
     e.stopPropagation()
 
-    const base = window.location.origin + window.location.pathname
+    const base = window.location.origin + '/Anime-Site'
     const url = `${base}?id=${show.mal_id}&q=${encodeURIComponent(displayTitle)}`
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -98,8 +100,7 @@ export function ShowCard({ show }: ShowCardProps) {
   const trailerId = show.trailer?.embed_url?.split('/embed/')[1]?.split('?')[0]
 
   const episodeStatusLine = (() => {
-    const epPart =
-      show.episodes != null ? `${show.episodes} eps` : '? eps'
+    const epPart = show.episodes != null ? `${show.episodes} eps` : '? eps'
     const statusPart = show.status ?? ''
     return statusPart ? `${epPart} · ${statusPart}` : epPart
   })()
@@ -120,12 +121,7 @@ export function ShowCard({ show }: ShowCardProps) {
       aria-label={displayTitle}
     >
       <div className='thumbnail-poster'>
-        <img
-          src={showImg}
-          alt={displayTitle}
-          loading='lazy'
-          decoding='async'
-        />
+        <img src={showImg} alt={displayTitle} loading='lazy' decoding='async' />
       </div>
 
       <div className='show-overlay'>
@@ -177,7 +173,6 @@ export function ShowCard({ show }: ShowCardProps) {
 
       <div className='show-details'>
         <div className='show-details-flex'>
-
           {/* Trailer — click-to-play thumbnail, only when expanded and available */}
           {hasTrailer && (
             <div
@@ -214,7 +209,9 @@ export function ShowCard({ show }: ShowCardProps) {
                     loading='lazy'
                     decoding='async'
                   />
-                  <span className='trailer-play-icon' aria-hidden='true'>▶</span>
+                  <span className='trailer-play-icon' aria-hidden='true'>
+                    ▶
+                  </span>
                 </div>
               )}
             </div>
@@ -247,7 +244,9 @@ export function ShowCard({ show }: ShowCardProps) {
                 {/* Episode count + airing status */}
                 {(show.episodes != null || show.status) && (
                   <p className='episode-status'>
-                    {show.airing && <span className='airing-dot' aria-hidden='true' />}
+                    {show.airing && (
+                      <span className='airing-dot' aria-hidden='true' />
+                    )}
                     {episodeStatusLine}
                   </p>
                 )}
@@ -273,7 +272,9 @@ export function ShowCard({ show }: ShowCardProps) {
                       Loading streaming services...
                     </p>
                   ) : streamingError ? (
-                    <p className='no-streaming'>Unable to load streaming info</p>
+                    <p className='no-streaming'>
+                      Unable to load streaming info
+                    </p>
                   ) : streamingServices.length > 0 ? (
                     <div className='streaming-services'>
                       {streamingServices.map((service, index) => (
@@ -290,13 +291,14 @@ export function ShowCard({ show }: ShowCardProps) {
                       ))}
                     </div>
                   ) : (
-                    <p className='no-streaming'>No streaming information found</p>
+                    <p className='no-streaming'>
+                      No streaming information found
+                    </p>
                   )}
                 </div>
               </div>
             )}
           </div>
-
         </div>
       </div>
     </div>
