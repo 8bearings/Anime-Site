@@ -50,8 +50,181 @@
   color: rgb(0, 0, 0);
 }
 
+.random-button-row {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem 0.5rem;
+}
+
+.random-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 9rem;
+  overflow: hidden;
+  height: 2.2rem;
+  padding: 0 0.9rem;
+  background-size: 300% 300%;
+  cursor: pointer;
+  backdrop-filter: blur(0.72rem);
+  border-radius: 2.5rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  animation: gradient_301 5s ease infinite;
+  border: double 3px transparent;
+  background-image: linear-gradient(#121912, #111810), linear-gradient(137.48deg, #12c165 18%, #1fe27f 38%, #0ec801 58%, #3bf598 77%, #0044ff 92%);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.random-btn strong {
+  z-index: 2;
+  font-family: 'Avalors Personal Use', sans-serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(76, 255, 157, 0.5);
+}
+
+.random-btn:hover {
+  transform: scale(1.03);
+}
+
+.random-btn:active {
+  border: double 3px #0ec801;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: none;
+}
+
+.random-btn:active .circle {
+  background: #fe53bb;
+}
+
+.container-stars {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: 0.35s;
+  backdrop-filter: blur(0.72rem);
+  border-radius: 2.5rem;
+  background-color: rgba(10, 35, 12, 0.45);
+}
+
+.random-btn:hover .container-stars {
+  z-index: 1;
+  background-color: #212121;
+}
+
+.glow {
+  position: absolute;
+  display: flex;
+  width: 12rem;
+}
+
+.circle {
+  width: 100%;
+  height: 22px;
+  filter: blur(1.4rem);
+  animation: pulse_3011 4s infinite;
+  z-index: -1;
+}
+
+.circle:nth-of-type(1) {
+  background: rgba(72, 255, 145, 0.42);
+}
+
+.circle:nth-of-type(2) {
+  background: rgba(97, 255, 186, 0.22);
+}
+
+.stars {
+  position: relative;
+  background: transparent;
+  width: 200rem;
+  height: 200rem;
+}
+
+.stars::after {
+  content: '';
+  position: absolute;
+  top: -10rem;
+  left: -100rem;
+  width: 100%;
+  height: 100%;
+  animation: animStarRotate 90s linear infinite;
+  background-image: radial-gradient(rgba(122, 255, 160, 0.8) 1px, transparent 1%);
+  background-size: 70px 70px;
+  opacity: 0.32;
+}
+
+.stars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 170%;
+  height: 500%;
+  animation: animStar 80s linear infinite;
+  background-image: radial-gradient(#ffffff 1px, transparent 1%);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-135rem);
+  }
+}
+
+@keyframes animStarRotate {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0);
+  }
+}
+
+@keyframes gradient_301 {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse_3011 {
+  0% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
 .refresh-button {
-  margin: 0 auto;
   display: block;
   padding: 0.15rem 0.2rem;
   background-color: #2b2b2b1f;
@@ -191,7 +364,8 @@
 
   .search-input {
     width: 100%;
-    font-size: 16px; /* Prevent iOS zoom on focus */
+    font-size: 16px;
+    /* Prevent iOS zoom on focus */
   }
 
   .search-button {

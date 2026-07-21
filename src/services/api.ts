@@ -4,9 +4,19 @@ import {
   AnimeByIdResponse,
   SeasonArchiveResponse,
 } from '../types/interfaces'
-import { apiFetch } from './http'
+import { apiFetch, ApiError } from './http'
 
 export { BASE_URL, ApiError } from './http'
+
+// --- Tenrai resilience ---
+const DEFAULT_LIST_LIMIT = 24
+
+function shouldFallbackPopularError(err: unknown): boolean {
+  if (err instanceof ApiError) {
+    return err.status >= 500 || err.status === 504
+  }
+  return false
+}
 
 // ---------------------------------------------------------------------------
 // Query builder
@@ -56,26 +66,34 @@ export function buildAnimeQuery(p: AnimeQuery): string {
 /** Accepts a raw param string (no leading `?`) from buildAnimeQuery. */
 export const searchAnime = async (
   query: string,
-  page: number = 1
+  page: number = 1,
 ): Promise<AnimeListResponse> => {
   const qs = [query, `page=${page}`].filter(Boolean).join('&')
   return apiFetch<AnimeListResponse>(`/anime?${qs}`)
 }
 
 export const getPopularAnime = async (
-  page: number = 1
+  page: number = 1,
 ): Promise<AnimeListResponse> => {
-  return apiFetch<AnimeListResponse>(`/seasons/now?sfw&page=${page}`)
+  try {
+    return await apiFetch<AnimeListResponse>(
+      `/seasons/now?sfw&limit=${DEFAULT_LIST_LIMIT}&page=${page}`,
+    )
+  } catch (err) {
+    // Fallback: if /seasons/now fails with 5xx/504, use popular anime instead
+    if (shouldFallbackPopularError(err)) {
+      return getTopAnime('bypopularity', page)
+    }
+    throw err
+  }
 }
 
-export const getAnimeById = async (
-  id: number
-): Promise<AnimeByIdResponse> => {
+export const getAnimeById = async (id: number): Promise<AnimeByIdResponse> => {
   return apiFetch<AnimeByIdResponse>(`/anime/${id}`)
 }
 
 export const getAnimeStreaming = async (
-  id: number
+  id: number,
 ): Promise<StreamingResponse> => {
   const data = await apiFetch<StreamingResponse>(`/anime/${id}/streaming`)
   return {
@@ -87,28 +105,36 @@ export const getAnimeStreaming = async (
 
 export const getTopAnime = async (
   filter?: 'airing' | 'upcoming' | 'bypopularity' | 'favorite',
-  page: number = 1
+  page: number = 1,
 ): Promise<AnimeListResponse> => {
   const filterPart = filter ? `filter=${filter}&` : ''
-  return apiFetch<AnimeListResponse>(`/top/anime?${filterPart}sfw&page=${page}`)
+  return apiFetch<AnimeListResponse>(
+    `/top/anime?${filterPart}sfw&limit=${DEFAULT_LIST_LIMIT}&page=${page}`,
+  )
 }
 
 export const getSeasonAnime = async (
   year: number,
   season: string,
-  page: number = 1
+  page: number = 1,
 ): Promise<AnimeListResponse> => {
   return apiFetch<AnimeListResponse>(
-    `/seasons/${year}/${season}?sfw&page=${page}`
+    `/seasons/${year}/${season}?sfw&limit=${DEFAULT_LIST_LIMIT}&page=${page}`,
   )
 }
 
 export const getUpcomingAnime = async (
-  page: number = 1
+  page: number = 1,
 ): Promise<AnimeListResponse> => {
-  return apiFetch<AnimeListResponse>(`/seasons/upcoming?sfw&page=${page}`)
+  return apiFetch<AnimeListResponse>(
+    `/seasons/upcoming?sfw&limit=${DEFAULT_LIST_LIMIT}&page=${page}`,
+  )
 }
 
 export const getSeasonsArchive = async (): Promise<SeasonArchiveResponse> => {
   return apiFetch<SeasonArchiveResponse>('/seasons')
+}
+
+export const getRandomAnime = async (): Promise<AnimeByIdResponse> => {
+  return apiFetch<AnimeByIdResponse>('/random/anime', { cache: false })
 }

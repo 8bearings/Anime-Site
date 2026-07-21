@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+checklist.md
+claude.md
+tenraiAPI.md
+Feature-Roadmap.md

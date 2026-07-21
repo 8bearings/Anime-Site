@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.jikan.moe/v4'
+export const BASE_URL = 'https://api.tenrai.org/v1'
 
 /**
  * Error thrown for any non-2xx API response. Carries the HTTP `status`
@@ -15,17 +15,14 @@ export class ApiError extends Error {
 }
 
 // --- In-memory response cache -------------------------------------------------
-// Jikan data changes slowly, so caching by URL for a few minutes makes repeat
-// searches / re-expanded cards feel instant and cuts requests against the
-// rate limit. Lives for the page session only.
+// Cache API responses by URL for a few minutes so repeat requests feel fast.
 
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 const cache = new Map<string, { data: unknown; expires: number }>()
 
 // --- Request throttle ---------------------------------------------------------
-// Jikan allows ~3 requests/second. We serialize requests through a promise
-// chain and space them by MIN_INTERVAL so bursts (infinite scroll, opening
-// several cards) don't trip 429s in the first place.
+// Serialize outgoing requests and add a small delay so a burst in traffic does not
+// exceed the public API rate limits.
 
 const MIN_INTERVAL = 350 // ms between outgoing requests
 let lastRequestTime = 0
@@ -47,15 +44,22 @@ function scheduleFetch(url: string): Promise<Response> {
 }
 
 /**
- * Fetch a JSON resource from the Jikan API with caching + rate-limit throttling.
+ * Fetch a JSON resource from the API with caching + rate-limit throttling.
  * @param path Path appended to BASE_URL, e.g. `/anime/1`.
+ * @param options Optional fetch behavior.
  */
-export async function apiFetch<T = unknown>(path: string): Promise<T> {
+export async function apiFetch<T = unknown>(
+  path: string,
+  options?: { cache?: boolean },
+): Promise<T> {
   const url = `${BASE_URL}${path}`
+  const useCache = options?.cache ?? true
 
-  const cached = cache.get(url)
-  if (cached && cached.expires > Date.now()) {
-    return cached.data as T
+  if (useCache) {
+    const cached = cache.get(url)
+    if (cached && cached.expires > Date.now()) {
+      return cached.data as T
+    }
   }
 
   const response = await scheduleFetch(url)

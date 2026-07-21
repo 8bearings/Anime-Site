@@ -3,7 +3,15 @@ import { ShowCard } from '../components/ShowCard'
 import { SkeletonCard } from '../components/SkeletonCard'
 import { Suggestion } from '../components/Suggestion'
 import { SearchAutocomplete } from '../components/SearchAutocomplete'
-import { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback, FormEvent } from 'react'
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  FormEvent,
+} from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   searchAnime,
@@ -14,12 +22,26 @@ import {
   getSeasonsArchive,
   buildAnimeQuery,
   ApiError,
+  getRandomAnime,
 } from '../services/api'
-import { AnimeShow, ActiveFilters, AnimeListResponse, SeasonArchiveEntry } from '../types/interfaces'
+import {
+  AnimeShow,
+  ActiveFilters,
+  AnimeListResponse,
+  SeasonArchiveEntry,
+} from '../types/interfaces'
 import { Footer } from '../components/Footer'
 import { excludedGenres, excludedTypes, debounce } from '../services/helper'
 
-type FeedMode = 'now' | 'airing' | 'popular' | 'upcoming' | 'top' | 'season' | 'search' | 'suggestion'
+type FeedMode =
+  | 'now'
+  | 'airing'
+  | 'popular'
+  | 'upcoming'
+  | 'top'
+  | 'season'
+  | 'search'
+  | 'suggestion'
 
 const TABS: { label: string; mode: FeedMode }[] = [
   { label: 'This Season', mode: 'now' },
@@ -77,6 +99,7 @@ export function Home() {
   const [pickerSeason, setPickerSeason] = useState(getCurrentSeason())
   const [seasonYear, setSeasonYear] = useState(new Date().getFullYear())
   const [seasonSeason, setSeasonSeason] = useState(getCurrentSeason())
+  const [loadingRandom, setLoadingRandom] = useState(false)
 
   // Move the slider pill to match the active tab before the browser paints,
   // so the initial position is correct on the first frame (no flash).
@@ -104,7 +127,7 @@ export function Home() {
     mode: FeedMode = feedMode,
     syear: number = seasonYear,
     sseason: string = seasonSeason,
-    query: string = searchQuery
+    query: string = searchQuery,
   ) {
     if (loadingRef.current) return
     loadingRef.current = true
@@ -132,7 +155,7 @@ export function Home() {
         case 'search':
           result = await searchAnime(
             buildAnimeQuery({ q: query, ...activeFiltersRef.current }),
-            pageNum
+            pageNum,
           )
           break
         default:
@@ -250,7 +273,13 @@ export function Home() {
   const handleScroll = () => {
     setShowBackToTop(window.scrollY > 600)
 
-    if (loadingRef.current || !hasMore || tooManyRequests || feedMode === 'suggestion') return
+    if (
+      loadingRef.current ||
+      !hasMore ||
+      tooManyRequests ||
+      feedMode === 'suggestion'
+    )
+      return
 
     const nearBottom =
       window.innerHeight + window.scrollY >=
@@ -272,7 +301,7 @@ export function Home() {
 
   const debouncedHandleScroll = useMemo(
     () => debounce(() => handleScrollRef.current(), 400),
-    []
+    [],
   )
 
   useEffect(() => {
@@ -287,17 +316,19 @@ export function Home() {
       shows
         .filter(
           (show, index, self) =>
-            index === self.findIndex((s) => s.mal_id === show.mal_id)
+            index === self.findIndex((s) => s.mal_id === show.mal_id),
         )
         .filter((show) => !excludedTypes.includes(show.type))
         .filter((show) => {
           if (allowExplicit) return true
           if (show.genres && show.genres.length > 0) {
-            return !show.genres.some((genre) => excludedGenres.includes(genre.name))
+            return !show.genres.some((genre) =>
+              excludedGenres.includes(genre.name),
+            )
           }
           return true
         }),
-    [shows, allowExplicit]
+    [shows, allowExplicit],
   )
 
   function handleShowSuggestion(suggested: AnimeShow[]) {
@@ -320,6 +351,19 @@ export function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  async function handleRandomAnime() {
+    setLoadingRandom(true)
+    try {
+      const result = await getRandomAnime()
+      navigate(`/anime/${result.data.mal_id}`)
+    } catch (err) {
+      console.error('Failed to get random anime:', err)
+      setError('Failed to get random anime. Please try again.')
+    } finally {
+      setLoadingRandom(false)
+    }
+  }
+
   // Archive years sorted newest-first; fall back to last 20 years if archive not loaded
   const archiveYears = useMemo(() => {
     if (archiveEntries.length > 0) {
@@ -329,20 +373,24 @@ export function Home() {
   }, [archiveEntries])
 
   const seasonLabel =
-    seasonSeason.charAt(0).toUpperCase() + seasonSeason.slice(1) + ' ' + seasonYear
+    seasonSeason.charAt(0).toUpperCase() +
+    seasonSeason.slice(1) +
+    ' ' +
+    seasonYear
 
   return (
     <div className='home-container'>
       <div className='home-content'>
         <div className='home'>
-
           {/* Browse mode pill tabs */}
           <div className='browse-tabs'>
             <div ref={sliderRef} className='browse-tab-slider' />
             {TABS.map((tab, i) => (
               <button
                 key={tab.mode}
-                ref={(el) => { tabRefs.current[i] = el }}
+                ref={(el) => {
+                  tabRefs.current[i] = el
+                }}
                 className={`browse-tab${feedMode === tab.mode ? ' active' : ''}`}
                 onClick={() => handleTabChange(tab.mode)}
               >
@@ -350,7 +398,9 @@ export function Home() {
               </button>
             ))}
             <button
-              ref={(el) => { tabRefs.current[TABS.length] = el }}
+              ref={(el) => {
+                tabRefs.current[TABS.length] = el
+              }}
               className={`browse-tab${feedMode === 'season' ? ' active' : ''}`}
               onClick={handleSeasonPickerOpen}
             >
@@ -366,7 +416,9 @@ export function Home() {
                 onChange={(e) => setPickerYear(Number(e.target.value))}
               >
                 {archiveYears.map((y) => (
-                  <option key={y} value={y}>{y}</option>
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
                 ))}
               </select>
               <select
@@ -400,13 +452,32 @@ export function Home() {
               onFiltersChange={handleFiltersChange}
               onAllowExplicitChange={setAllowExplicit}
             />
+            <div className='random-button-row'>
+              <button
+                type='button'
+                className='random-btn'
+                onClick={handleRandomAnime}
+                disabled={loadingRandom}
+              >
+                <strong>{loadingRandom ? 'LOADING' : 'RANDOM ANIME'}</strong>
+                <div className='container-stars'>
+                  <div className='stars' />
+                </div>
+                <div className='glow'>
+                  <div className='circle' />
+                  <div className='circle' />
+                </div>
+              </button>
+            </div>
           </div>
 
           {(feedMode === 'search' || feedMode === 'suggestion') && (
             <div className='results-context'>
               <span className='results-context-label'>
                 {feedMode === 'search' ? (
-                  <>Results for <strong>“{searchQuery}”</strong></>
+                  <>
+                    Results for <strong>“{searchQuery}”</strong>
+                  </>
                 ) : (
                   'Filtered suggestions'
                 )}

@@ -10,10 +10,11 @@ Anime Finder is a web application built using React and TypeScript that allows u
 - **Browse Modes**: Switch between This Season, Airing, Popular, Upcoming, Top Rated, and a custom Season picker via pill-style tab navigation.
 - **Filters & Sort**: Collapse the "Need Some Direction?" panel to sort by score/popularity/date, filter by status and type, set score range (min/max sliders), and filter by release year range.
 - **Anime Detail Pages**: Each show has a dedicated route (`/anime/:id`) with full info — poster, synopsis, genres, studios, score, episode count, airing status, streaming services, and click-to-play trailer.
+- **Random Anime Button**: Discover a surprise show instantly with the new Random anime button, which loads a fresh random detail page on each click.
 - **Trailer Embeds**: YouTube trailers play inline (click-to-play thumbnail → `<iframe>`) inside both expanded cards and the detail page.
 - **Favorite Anime**: Click the ♥ icon on any card or detail page to save a show. Favorites persist in `localStorage` and are accessible on the Favorites page.
 - **Share Anime**: Copy a share link for any show. Old `?id=` share URLs auto-redirect to the proper detail route.
-- **Streaming Services**: Available streaming platforms are listed on each expanded card and detail page (fetched from Jikan's `/anime/:id/streaming`).
+- **Streaming Services**: Available streaming platforms are listed on each expanded card and detail page (fetched from Tenra's `/anime/:id/streaming`).
 - **Infinite Scroll**: Results load in pages as you scroll down, with skeleton cards shown while loading.
 - **Responsive Design**: Mobile-friendly layout with adapted grid, card sizes, and detail page at 600px and below.
 
@@ -22,7 +23,7 @@ Anime Finder is a web application built using React and TypeScript that allows u
 - **React 18** + **TypeScript** + **Vite** — SPA build toolchain
 - **React Router v6** — client-side routing with GitHub Pages deep-link support
 - **CSS** (no UI framework) — Oswald + Inter fonts via Google Fonts
-- **Jikan API v4** (`https://api.jikan.moe/v4`) — unofficial MyAnimeList REST API, no auth required
+- **Tenrai API v1** (`https://api.tenrai.org/v1`) — unofficial MyAnimeList REST API, no auth required
 
 ## Getting Started
 
@@ -42,6 +43,7 @@ The dev server starts at `http://localhost:5173/Anime-Site`.
 - **Filtering**: Open the "Need Some Direction?" panel to apply sort, status, type, score, and year filters.
 - **Card details**: Click any card to expand inline (synopsis, genres, score, streaming, trailer). Click "Details →" to go to the full detail page.
 - **Favoriting**: Click ♥ on a card or the detail page to save/unsave. View all saved shows on the Favorites page.
+- **Random Discovery**: Use the Random anime button below the “Need Some Direction?” panel to jump directly to a random anime detail page without refreshing.
 
 ## Deployment
 
@@ -55,4 +57,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Acknowledgments
 
-- Thanks to the [Jikan API](https://jikan.moe/) for providing the data used in this application.
+- Thanks to the [Tenrai API](https://tenrai.org/) for providing the data used in this application.

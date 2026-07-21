@@ -9,11 +9,11 @@ export const Footer: React.FC = () => {
         <p className='bottom-footer'>
           Powered by{' '}
           <a
-            href='https://jikan.moe/'
+            href='https://tenrai.org/'
             target='_blank'
             rel='noopener noreferrer'
           >
-            Jikan API
+            Tenrai API
           </a>
         </p>
       </div>
