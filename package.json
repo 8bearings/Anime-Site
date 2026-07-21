@@ -23,7 +23,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/styled-components": "^5.1.36",
-    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-react": "4.7.0",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
@@ -31,9 +31,9 @@
     "globals": "^15.14.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^8.1.5"
+    "vite": "6.4.3"
   },
   "optionalDependencies": {
-    "@rolldown/binding-darwin-arm64": "^1.2.0"
+    "@rolldown/binding-darwin-arm64": "^1.1.5"
   }
 }
